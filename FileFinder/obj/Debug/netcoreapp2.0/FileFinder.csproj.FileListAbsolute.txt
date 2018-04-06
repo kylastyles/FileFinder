@@ -1,0 +1,11 @@
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\bin\Debug\netcoreapp2.0\FileFinder.deps.json
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\bin\Debug\netcoreapp2.0\FileFinder.runtimeconfig.json
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\bin\Debug\netcoreapp2.0\FileFinder.runtimeconfig.dev.json
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\bin\Debug\netcoreapp2.0\FileFinder.dll
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\obj\Debug\netcoreapp2.0\FileFinder.csprojResolveAssemblyReference.cache
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\obj\Debug\netcoreapp2.0\FileFinder.csproj.CoreCompileInputs.cache
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\obj\Debug\netcoreapp2.0\FileFinder.AssemblyInfoInputs.cache
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\obj\Debug\netcoreapp2.0\FileFinder.AssemblyInfo.cs
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\bin\Debug\netcoreapp2.0\FileFinder.pdb
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\obj\Debug\netcoreapp2.0\FileFinder.dll
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\obj\Debug\netcoreapp2.0\FileFinder.pdb

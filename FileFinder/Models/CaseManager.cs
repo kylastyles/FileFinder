@@ -5,22 +5,18 @@ using System.Threading.Tasks;
 
 namespace FileFinder.Models
 {
-    public class CaseManager
+    public class CaseManager : Person
     {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int ID { get; set; }
+
         public string Email { get; set; }
-        public int PhoneNumber { get; set; }
 
-        public int ProgramID { get; set; }
-        public Program Program { get; set; }
+        public string PhoneNumber { get; set; }
 
-        public IList<Consumer> Consumers { get; set; }
+        public int CProgramID { get; set; }
+        public CProgram CProgram { get; set; }
 
-        public CaseManager()
-        {
+        public ICollection<File> Files { get; set; }
 
-        }
     }
 }

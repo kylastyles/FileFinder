@@ -2,22 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 
 namespace FileFinder.Models
 {
-    public class Consumer : Person
+    public class Room
     {
         public int ID { get; set; }
 
-        [Display(Name ="Date of Birth")]
-        public DateTime DOB { get; set; }
+        public string Name { get; set; }
 
-        public bool Active { get; set; } = true;
-
+        public int BuildingID { get; set; }
+        public Building Building { get; set; }
 
         public ICollection<File> Files { get; set; }
-
-
     }
 }
