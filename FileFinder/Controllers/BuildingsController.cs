@@ -10,22 +10,22 @@ using FileFinder.Models;
 
 namespace FileFinder.Controllers
 {
-    public class ConsumerController : Controller
+    public class BuildingsController : Controller
     {
         private readonly FileFinderContext _context;
 
-        public ConsumerController(FileFinderContext context)
+        public BuildingsController(FileFinderContext context)
         {
             _context = context;
         }
 
-        // GET: Consumer
+        // GET: Buildings
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Consumers.ToListAsync());
+            return View(await _context.Buildings.ToListAsync());
         }
 
-        // GET: Consumer/Details/5
+        // GET: Buildings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace FileFinder.Controllers
                 return NotFound();
             }
 
-            var consumer = await _context.Consumers
+            var building = await _context.Buildings
                 .SingleOrDefaultAsync(m => m.ID == id);
-            if (consumer == null)
+            if (building == null)
             {
                 return NotFound();
             }
 
-            return View(consumer);
+            return View(building);
         }
 
-        // GET: Consumer/Create
+        // GET: Buildings/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Consumer/Create
+        // POST: Buildings/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,DOB,Active,LastName,FirstName")] Consumer consumer)
+        public async Task<IActionResult> Create([Bind("ID,Name,Address")] Building building)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(consumer);
+                _context.Add(building);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(consumer);
+            return View(building);
         }
 
-        // GET: Consumer/Edit/5
+        // GET: Buildings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace FileFinder.Controllers
                 return NotFound();
             }
 
-            var consumer = await _context.Consumers.SingleOrDefaultAsync(m => m.ID == id);
-            if (consumer == null)
+            var building = await _context.Buildings.SingleOrDefaultAsync(m => m.ID == id);
+            if (building == null)
             {
                 return NotFound();
             }
-            return View(consumer);
+            return View(building);
         }
 
-        // POST: Consumer/Edit/5
+        // POST: Buildings/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,DOB,Active,LastName,FirstName")] Consumer consumer)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Address")] Building building)
         {
-            if (id != consumer.ID)
+            if (id != building.ID)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace FileFinder.Controllers
             {
                 try
                 {
-                    _context.Update(consumer);
+                    _context.Update(building);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ConsumerExists(consumer.ID))
+                    if (!BuildingExists(building.ID))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace FileFinder.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(consumer);
+            return View(building);
         }
 
-        // GET: Consumer/Delete/5
+        // GET: Buildings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace FileFinder.Controllers
                 return NotFound();
             }
 
-            var consumer = await _context.Consumers
+            var building = await _context.Buildings
                 .SingleOrDefaultAsync(m => m.ID == id);
-            if (consumer == null)
+            if (building == null)
             {
                 return NotFound();
             }
 
-            return View(consumer);
+            return View(building);
         }
 
-        // POST: Consumer/Delete/5
+        // POST: Buildings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var consumer = await _context.Consumers.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Consumers.Remove(consumer);
+            var building = await _context.Buildings.SingleOrDefaultAsync(m => m.ID == id);
+            _context.Buildings.Remove(building);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ConsumerExists(int id)
+        private bool BuildingExists(int id)
         {
-            return _context.Consumers.Any(e => e.ID == id);
+            return _context.Buildings.Any(e => e.ID == id);
         }
     }
 }

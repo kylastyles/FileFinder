@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace FileFinder.Models
 {
@@ -11,10 +12,11 @@ namespace FileFinder.Models
 
         public string Email { get; set; }
 
+        [Display(Name ="Phone Number")]
         public string PhoneNumber { get; set; }
 
-        public int CProgramID { get; set; }
-        public CProgram CProgram { get; set; }
+        public int ProgramID { get; set; }
+        public Program Program { get; set; }
 
         public ICollection<File> Files { get; set; }
 

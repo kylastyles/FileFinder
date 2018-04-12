@@ -11,6 +11,7 @@ namespace FileFinder.Models
         public int ID { get; set; }
 
         [Display(Name ="Date of Birth")]
+        [DisplayFormat(DataFormatString ="{0:mm/dd/yyyy}")]
         public DateTime DOB { get; set; }
 
         public bool Active { get; set; } = true;

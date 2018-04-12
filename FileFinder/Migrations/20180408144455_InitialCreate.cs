@@ -31,8 +31,8 @@ namespace FileFinder.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     DOB = table.Column<DateTime>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,7 +40,7 @@ namespace FileFinder.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CPrograms",
+                name: "Programs",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -49,7 +49,7 @@ namespace FileFinder.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CPrograms", x => x.ID);
+                    table.PrimaryKey("PK_Programs", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,19 +78,19 @@ namespace FileFinder.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CProgramID = table.Column<int>(nullable: false),
                     Email = table.Column<string>(nullable: true),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true)
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    ProgramID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CaseManagers", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_CaseManagers_CPrograms_CProgramID",
-                        column: x => x.CProgramID,
-                        principalTable: "CPrograms",
+                        name: "FK_CaseManagers_Programs_ProgramID",
+                        column: x => x.ProgramID,
+                        principalTable: "Programs",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -103,9 +103,9 @@ namespace FileFinder.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CaseManagerID = table.Column<int>(nullable: false),
                     ConsumerID = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
                     RoomID = table.Column<int>(nullable: false),
-                    ShredDate = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    ShredDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -131,9 +131,9 @@ namespace FileFinder.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CaseManagers_CProgramID",
+                name: "IX_CaseManagers_ProgramID",
                 table: "CaseManagers",
-                column: "CProgramID");
+                column: "ProgramID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Files_CaseManagerID",
@@ -171,7 +171,7 @@ namespace FileFinder.Migrations
                 name: "Rooms");
 
             migrationBuilder.DropTable(
-                name: "CPrograms");
+                name: "Programs");
 
             migrationBuilder.DropTable(
                 name: "Buildings");

@@ -12,9 +12,10 @@ using System;
 namespace FileFinder.Migrations
 {
     [DbContext(typeof(FileFinderContext))]
-    partial class FileFinderContextModelSnapshot : ModelSnapshot
+    [Migration("20180410152041_StatusTable")]
+    partial class StatusTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

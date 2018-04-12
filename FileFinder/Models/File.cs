@@ -7,16 +7,16 @@ namespace FileFinder.Models
 {
     public enum Status
     {
-        Normal,
-        Damaged,
+        OK,
         InactiveConsumer,
-        Full
+        Full,
+        Damaged
     }
 
     public class File
     {
         public int ID { get; set; }
-
+        public int Quantity { get; set; } = 1;
         public Status? Status { get; set; }
         public DateTime? ShredDate { get; set; }
 

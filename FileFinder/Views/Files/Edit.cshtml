@@ -1,0 +1,59 @@
+﻿@model FileFinder.Models.File
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>File</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShredDate" class="control-label"></label>
+                <input asp-for="ShredDate" class="form-control" />
+                <span asp-validation-for="ShredDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConsumerID" class="control-label"></label>
+                <select asp-for="ConsumerID" class="form-control" asp-items="ViewBag.ConsumerID"></select>
+                <span asp-validation-for="ConsumerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CaseManagerID" class="control-label"></label>
+                <select asp-for="CaseManagerID" class="form-control" asp-items="ViewBag.CaseManagerID"></select>
+                <span asp-validation-for="CaseManagerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoomID" class="control-label"></label>
+                <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
+                <span asp-validation-for="RoomID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

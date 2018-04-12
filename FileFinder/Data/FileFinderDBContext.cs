@@ -17,9 +17,10 @@ namespace FileFinder.Data
         public DbSet<Consumer> Consumers { get; set; }
         public DbSet<CaseManager> CaseManagers { get; set; }
         public DbSet<Building> Buildings { get; set; }
-        public DbSet<CProgram> CPrograms { get; set; }
+        public DbSet<Models.Program> Programs { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Room> Rooms { get; set; }
+
 
     }
 }
