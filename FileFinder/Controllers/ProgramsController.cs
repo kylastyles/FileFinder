@@ -22,7 +22,7 @@ namespace FileFinder.Controllers
         // GET: Programs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Programs.ToListAsync());
+            return View(await _context.Programs.OrderBy(p => p.Name).ToListAsync());
         }
 
         // GET: Programs/Details/5
@@ -35,6 +35,10 @@ namespace FileFinder.Controllers
 
             var Program = await _context.Programs
                 .SingleOrDefaultAsync(m => m.ID == id);
+
+            Program.CaseManagers = _context.CaseManagers.Where(cm => cm.ProgramID == Program.ID).OrderBy(cm => cm.FullName()).ToList();
+
+
             if (Program == null)
             {
                 return NotFound();

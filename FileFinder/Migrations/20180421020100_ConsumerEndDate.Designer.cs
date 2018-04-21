@@ -12,9 +12,10 @@ using System;
 namespace FileFinder.Migrations
 {
     [DbContext(typeof(FileFinderContext))]
-    partial class FileFinderContextModelSnapshot : ModelSnapshot
+    [Migration("20180421020100_ConsumerEndDate")]
+    partial class ConsumerEndDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +71,7 @@ namespace FileFinder.Migrations
 
                     b.Property<DateTime>("DOB");
 
-                    b.Property<DateTime?>("EndDate");
+                    b.Property<DateTime>("EndDate");
 
                     b.Property<string>("FirstName")
                         .IsRequired();

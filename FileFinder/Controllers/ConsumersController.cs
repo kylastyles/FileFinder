@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FileFinder.Data;
 using FileFinder.Models;
+using FileFinder.ViewModels;
 
 namespace FileFinder.Controllers
 {
@@ -22,12 +23,13 @@ namespace FileFinder.Controllers
         // GET: Consumer
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Consumers.ToListAsync());
+            return View(await _context.Consumers.OrderBy(c=> c.FullName()).ToListAsync());
         }
 
         // GET: Consumer/Details/5 
         public async Task<IActionResult> Details(int? id)
         {
+            // TODO: Add Files to Consumer Details
             if (id == null)
             {
                 return NotFound();
@@ -46,7 +48,9 @@ namespace FileFinder.Controllers
         // GET: Consumer/Create
         public IActionResult Create()
         {
-            return View();
+            CreateConsumerViewModel createConsumerVM = new CreateConsumerViewModel(); 
+
+            return View(createConsumerVM);
         }
 
         // POST: Consumer/Create
@@ -54,15 +58,24 @@ namespace FileFinder.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,DOB,Active,LastName,FirstName")] Consumer consumer)
+        //public async Task<IActionResult> Create([Bind("ID,DOB,Active,LastName,FirstName")] Consumer consumer)
+        public async Task<IActionResult> Create(CreateConsumerViewModel createConsumerVM)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(consumer);
+                Consumer newConsumer = new Consumer
+                {
+                    LastName = createConsumerVM.LastName,
+                    FirstName = createConsumerVM.FirstName,
+                    DOB = createConsumerVM.DOB
+                };
+
+                _context.Add(newConsumer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(consumer);
+
+            return View(createConsumerVM);
         }
 
         // GET: Consumer/Edit/5

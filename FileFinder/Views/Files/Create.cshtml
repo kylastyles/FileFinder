@@ -19,15 +19,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="ConsumerID" class="control-label"></label>
-                <select asp-for="ConsumerID" class ="form-control" asp-items="ViewBag.ConsumerID"></select>
+                <select asp-for="ConsumerID" class ="form-control" asp-items="@Model.Consumers"></select>
             </div>
             <div class="form-group">
                 <label asp-for="CaseManagerID" class="control-label"></label>
-                <select asp-for="CaseManagerID" class ="form-control" asp-items="ViewBag.CaseManagerID"></select>
+                <select asp-for="CaseManagerID" class ="form-control" asp-items="@Model.CaseManagers"></select>
             </div>
             <div class="form-group">
                 <label asp-for="RoomID" class="control-label"></label>
-                <select asp-for="RoomID" class ="form-control" asp-items="ViewBag.RoomID"></select>
+                <select asp-for="RoomID" class ="form-control" asp-items="@Model.Rooms"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />

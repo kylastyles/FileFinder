@@ -10,12 +10,15 @@ namespace FileFinder.Models
     {
         public int ID { get; set; }
 
-        [Display(Name ="Date of Birth")]
-        [DisplayFormat(DataFormatString ="{0:mm/dd/yyyy}")]
+        [Display(Name = "Date of Birth")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DOB { get; set; }
 
         public bool Active { get; set; } = true;
 
+        [Display(Name = "End Date")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime? EndDate { get; set; }
 
         public ICollection<File> Files { get; set; }
 

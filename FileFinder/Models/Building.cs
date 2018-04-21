@@ -11,6 +11,7 @@ namespace FileFinder.Models
 
         public string Name { get; set; }
         public string Address { get; set; }
+        public int PhoneNumber { get; set; }
 
         public ICollection<Room> Rooms { get; set; }
     }

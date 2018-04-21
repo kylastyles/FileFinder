@@ -22,7 +22,7 @@ namespace FileFinder.Controllers
         // GET: Buildings
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Buildings.ToListAsync());
+            return View(await _context.Buildings.OrderBy(b => b.Name).ToListAsync());
         }
 
         // GET: Buildings/Details/5
@@ -35,6 +35,9 @@ namespace FileFinder.Controllers
 
             var building = await _context.Buildings
                 .SingleOrDefaultAsync(m => m.ID == id);
+
+            building.Rooms = _context.Rooms.Where(r => r.BuildingID == building.ID).OrderBy(r => r.Name).ToList();
+
             if (building == null)
             {
                 return NotFound();

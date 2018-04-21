@@ -1,0 +1,47 @@
+﻿@model FileFinder.ViewModels.SearchViewModel
+
+<h2>Consumer Query</h2>
+<p>
+
+</p>
+
+<!--  form  -->
+<form asp-controller="Search" asp-action="Results" method="post">
+    <p>
+        @foreach (var column in Model.Columns)
+        {
+                       
+            var checkedColumn = column.Equals(Model.Column);
+
+            <span>
+                <input type="radio" name="Column" id="@column" value="@column" checked="@checkedColumn" />
+                <label for="@column">@column</label>
+            </span>
+        }
+    </p>
+
+    <p>
+        <label asp-for="UserInput"></label> 
+        <input asp-for="UserInput" />
+    </p>
+
+    <input type="Submit" value="Search" />
+</form>
+
+<hr />
+
+<!--  results  -->
+@*@if (Model.Results != null)
+{
+    <h3>@Model.Results.Count  Result(s) for "@Model.UserInput"</h3>
+
+    <ul>
+        @foreach (var result in Model.Results)
+        {
+        <li>@result</li>
+
+         }
+
+    </ul>
+
+}*@

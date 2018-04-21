@@ -28,5 +28,28 @@ namespace FileFinder.Models
 
         public int RoomID { get; set; }
         public Room Room { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if(obj == this)
+            {
+                return true;
+            }
+
+            if(obj == null || obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            // Files are equal if they have the same ConsumerID, CaseManagerID, and RoomID
+            File fileObj = obj as File;
+            return ConsumerID == fileObj.ConsumerID && CaseManagerID == fileObj.CaseManagerID && RoomID == fileObj.RoomID;
+        }
+
+        public override int GetHashCode()
+        {
+            //return base.GetHashCode();
+            return ID;
+        }
     }
 }

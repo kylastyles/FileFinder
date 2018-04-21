@@ -4,12 +4,13 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>Case Manager Details</h2>
 
 <div>
-    <h4>CaseManager</h4>
+    <h4>@Model.FullName()</h4>
     <hr />
     <dl class="dl-horizontal">
+
         <dt>
             @Html.DisplayNameFor(model => model.Email)
         </dt>
@@ -23,26 +24,14 @@
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Program)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Program.ID)
+            @Html.DisplayFor(model => model.Program.Name)
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to Case Manager List</a>
 </div>

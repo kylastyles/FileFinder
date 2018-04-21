@@ -24,7 +24,7 @@ namespace FileFinder.Controllers
         public async Task<IActionResult> Index()
         {
             var fileFinderContext = _context.CaseManagers.Include(c => c.Program);
-            return View(await fileFinderContext.ToListAsync());
+            return View(await fileFinderContext.OrderBy(cm => cm.FullName()).ToListAsync());
         }
 
         // GET: CaseManagers/Details/5

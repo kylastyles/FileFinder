@@ -1,0 +1,20 @@
+﻿@model FileFinder.ViewModels.SearchViewModel
+
+@if (Model.Results == null)
+{
+    <h3>No Results</h3>
+
+}else
+{
+    <h3>@Model.Results.Count  Result(s) for "@Model.UserInput"</h3>
+
+    <ul>
+        @foreach (var result in Model.Results)
+        {
+            <li>@result.FullName()</li>
+
+        }
+
+    </ul>
+
+}

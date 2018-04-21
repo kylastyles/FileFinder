@@ -23,8 +23,9 @@ namespace FileFinder.Controllers
         // GET: Rooms
         public async Task<IActionResult> Index()
         {
-            var fileFinderContext = _context.Rooms.Include(r => r.Building);
-            return View(await fileFinderContext.ToListAsync());
+            var fileFinderContext = _context.Rooms.Include(r => r.Building).OrderBy(r => r.Name).ToListAsync();
+
+            return View(await fileFinderContext);
         }
 
         // GET: Rooms/Details/5
@@ -38,6 +39,10 @@ namespace FileFinder.Controllers
             var room = await _context.Rooms
                 .Include(r => r.Building)
                 .SingleOrDefaultAsync(m => m.ID == id);
+
+            // TODO: Add files to rooms
+            room.Files = _context.Files.Where(f => f.RoomID == room.ID).ToList();
+
             if (room == null)
             {
                 return NotFound();

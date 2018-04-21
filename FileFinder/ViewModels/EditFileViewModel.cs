@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FileFinder.Models;
 using System.ComponentModel.DataAnnotations;
+using FileFinder.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FileFinder.ViewModels
 {
-    public class CreateFileViewModel
+    public class EditFileViewModel
     {
+        public int ID { get; set; }
+
         public int Quantity { get; set; } = 1;
 
-        public Status? Status { get; set; } = Models.Status.OK;
+        public Status? Status { get; set; }
+
+        public DateTime? ShredDate { get; set; }
 
         [Required]
-        [Display(Name ="Consumer")]
+        [Display(Name = "Consumer")]
         public int ConsumerID { get; set; }
 
         public List<SelectListItem> Consumers { get; set; }
@@ -33,7 +37,5 @@ namespace FileFinder.ViewModels
         public List<SelectListItem> Rooms { get; set; }
 
         public List<SelectListItem> StatusList { get; set; }
-
-
     }
 }

@@ -18,9 +18,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Status)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ShredDate)
-                </th>
             <th>
                 @Html.DisplayNameFor(model => model.CaseManager)
             </th>
@@ -43,16 +40,16 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ShredDate)
+                <a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@item.CaseManagerID">
+                @Html.DisplayFor(modelItem => item.CaseManager.LastName), @Html.DisplayFor(modelItem => item.CaseManager.FirstName) </a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CaseManager.FirstName)
+                <a asp-controller="Consumers" asp-action="Details" asp-route-id="@item.ConsumerID">
+                @Html.DisplayFor(modelItem => item.Consumer.LastName), @Html.DisplayFor(modelItem => item.Consumer.FirstName) </a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Consumer.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Room.Name)
+                <a asp-controller="Rooms" asp-action="Details" asp-route-id="@item.RoomID">
+                @Html.DisplayFor(modelItem => item.Room.Name) </a>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
