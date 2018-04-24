@@ -10,11 +10,11 @@
     <p>
         @foreach (var column in Model.Columns)
         {
-                       
-            var checkedColumn = column.Equals(Model.Column);
+
+            //var checkedColumn = column.Equals(Model.SelectedColumn);
 
             <span>
-                <input type="radio" name="Column" id="@column" value="@column" checked="@checkedColumn" />
+                <input type="radio" name="SelectedColumn" id="@column" value="@column" />
                 <label for="@column">@column</label>
             </span>
         }

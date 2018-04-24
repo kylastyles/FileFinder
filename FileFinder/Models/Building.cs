@@ -14,5 +14,10 @@ namespace FileFinder.Models
         public int PhoneNumber { get; set; }
 
         public ICollection<Room> Rooms { get; set; }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

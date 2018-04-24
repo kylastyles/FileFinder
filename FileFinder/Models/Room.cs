@@ -15,5 +15,11 @@ namespace FileFinder.Models
         public Building Building { get; set; }
 
         public ICollection<File> Files { get; set; }
+
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

@@ -1,6 +1,74 @@
-﻿@{
+﻿@model FileFinder.ViewModels.SearchViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="jumbotron"><h1>FileFinder</h1></div>
-<div class="col-md-12"><p>Click links above.</p></div>
+
+
+<h2>Consumer Query</h2>
+<p>
+
+</p>
+
+<!--  form  -->
+<form asp-controller="Home" asp-action="Search" method="post">
+    <p>
+        @foreach (var column in Model.Columns)
+        {
+
+            var checkedColumn = column.Equals(Model.SelectedColumn);
+
+            <span>
+                <input type="radio" name="SelectedColumn" id="@column" value="@column" checked="@checkedColumn"/>
+                <label for="@column">@column</label>
+            </span>
+        }
+    </p>
+
+    <p>
+        <label asp-for="UserInput"></label>
+        <input asp-for="UserInput" />
+    </p>
+
+    <input type="Submit" value="Search" />
+</form>
+
+<hr />
+
+<!--  results  -->
+
+@if (Model.ConsumerResults != null)
+{
+    <h3>Consumers</h3>
+    <br />
+    @foreach (var result in Model.ConsumerResults)
+    {
+        <p><a asp-controller="Consumers" asp-action="Details" asp-route-id="@result.ID">@result.FullName()</a></p>
+    }
+    <br />
+}
+
+@if (Model.CaseManagerResults != null)
+{
+    <h3>Case Managers</h3>
+    <br />
+    @foreach (var result in Model.CaseManagerResults)
+    {
+        <p><a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@result.ID">@result.FullName()</a></p>
+    }
+    <br />
+}
+
+@if (Model.ProgramResults != null)
+{
+    <h3>Programs</h3>
+    <br />
+
+    @foreach (var result in Model.ProgramResults)
+    {
+        <p><a asp-controller="Programs" asp-action="Details" asp-route-id="@result.ID">@result.Name</a></p>
+    }
+
+}

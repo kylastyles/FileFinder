@@ -21,5 +21,9 @@ namespace FileFinder.Models
             return LastName + ", " + FirstName;
         }
 
+        public override string ToString()
+        {
+            return this.FullName();
+        }
     }
 }

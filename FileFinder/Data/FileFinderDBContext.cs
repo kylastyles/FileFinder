@@ -21,16 +21,56 @@ namespace FileFinder.Data
         public DbSet<File> Files { get; set; }
         public DbSet<Room> Rooms { get; set; }
 
-        // TODO: Improve search. "min" searched in CaseManagers returned 0, but SHOULD return McGonagall.
 
-        public List<Consumer> FindByValue(string value)
+        public List<Consumer> SearchConsumers(string value)
         {
-            var results = from c in Consumers
-                          where c.FullName().Contains(value)
-                          || c.FullName().ToLower().Contains(value.ToLower())
-                          select c;
+            if (String.IsNullOrEmpty(value))
+            {
+                return Consumers.OrderBy(c => c.FullName()).ToList();
+            }
+
+            var results = from c in Consumers where c.FullName().Contains(value) || c.FullName().ToLower().Contains(value.ToLower()) select c;
+
+            if (results.ToList().Count() == 0)
+            {
+                return null;
+            }
+
             return results.OrderBy(c => c.FullName()).ToList();
         }
+
+        public List<CaseManager> SearchCaseManagers(string value)
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                return CaseManagers.OrderBy(c => c.FullName()).ToList();
+            }
+
+            var results = from c in CaseManagers where c.FullName().Contains(value) || c.FullName().ToLower().Contains(value.ToLower()) select c;
+
+            if (results.ToList().Count() == 0)
+            {
+                return null;
+            }
+            return results.OrderBy(c => c.FullName()).ToList();
+        }
+
+        public List<Models.Program> SearchPrograms(string value)
+        {
+            if(String.IsNullOrEmpty(value))
+            {
+                return Programs.OrderBy(p => p.Name).ToList();
+            }
+
+            var results = from p in Programs where p.Name.Contains(value) || p.Name.ToLower().Contains(value.ToLower()) select p;
+
+            if (results.ToList().Count() == 0)
+            {
+                return null;
+            }
+            return results.OrderBy(p => p.Name).ToList();
+        }
+
 
         public Consumer FindByID(int id)
         {

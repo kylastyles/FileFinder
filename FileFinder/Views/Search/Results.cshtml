@@ -1,20 +1,40 @@
 ﻿@model FileFinder.ViewModels.SearchViewModel
 
-@if (Model.Results == null)
+
+<h2>Results for "@Model.UserInput"</h2>
+<br />
+
+@if (Model.ConsumerResults != null)
 {
-    <h3>No Results</h3>
+    <h3>Consumers</h3>
+    <br />
+    @foreach (var result in Model.ConsumerResults)
+    {
+        <p><a asp-controller="Consumers" asp-action="Details" asp-route-id="@result.ID">@result.FullName()</a></p>
+    }
+    <br />
+}
 
-}else
+@if (Model.CaseManagerResults != null)
 {
-    <h3>@Model.Results.Count  Result(s) for "@Model.UserInput"</h3>
+    <h3>Case Managers</h3>
+    <br />
+    @foreach (var result in Model.CaseManagerResults)
+    {
+        <p><a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@result.ID">@result.FullName()</a></p>
+    }
+    <br />
+}
 
-    <ul>
-        @foreach (var result in Model.Results)
-        {
-            <li>@result.FullName()</li>
+@if (Model.ProgramResults != null)
+{
+    <h3>Programs</h3>
+    <br />
 
-        }
-
-    </ul>
+    @foreach (var result in Model.ProgramResults)
+    {
+        <p><a asp-controller="Programs" asp-action="Details" asp-route-id="@result.ID">@result.Name</a></p>
+    }
 
 }
+

@@ -16,9 +16,10 @@ namespace FileFinder.Models
 
         public ICollection<CaseManager> CaseManagers { get; set; }
 
-        public Program()
-        {
 
+        public override string ToString()
+        {
+            return this.Name;
         }
     }
 }

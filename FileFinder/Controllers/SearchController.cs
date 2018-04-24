@@ -26,11 +26,6 @@ namespace FileFinder.Controllers
         {
             SearchViewModel searchViewModel = new SearchViewModel();
 
-            //searchViewModel.Columns.Add(SearchFieldType.All);
-            //searchViewModel.Columns.Add(SearchFieldType.CaseManager);
-            //searchViewModel.Columns.Add(SearchFieldType.Consumer);
-            //searchViewModel.Columns.Add(SearchFieldType.Program);
-
             return View(searchViewModel);
         }
     
@@ -38,12 +33,30 @@ namespace FileFinder.Controllers
         [HttpPost]
         public IActionResult Results(SearchViewModel searchViewModel)
         {
+            //Populate All Results Fields
+            searchViewModel.ConsumerResults = _context.SearchConsumers(searchViewModel.UserInput);
+            searchViewModel.CaseManagerResults = _context.SearchCaseManagers(searchViewModel.UserInput);
+            searchViewModel.ProgramResults = _context.SearchPrograms(searchViewModel.UserInput);
 
-            if (searchViewModel.Column.Equals(SearchFieldType.Consumer) || searchViewModel.UserInput.Equals(""))
+            //Remove fields not selected by user
+            if (searchViewModel.SelectedColumn.Equals(SearchFieldType.Consumer))
             {
-                searchViewModel.Results = _context.FindByValue(searchViewModel.UserInput);
-
+                searchViewModel.CaseManagerResults = null;
+                searchViewModel.ProgramResults = null;
             }
+
+            if (searchViewModel.SelectedColumn.Equals(SearchFieldType.CaseManager))
+            {
+                searchViewModel.ConsumerResults = null;
+                searchViewModel.ProgramResults = null;
+            }
+
+            if (searchViewModel.SelectedColumn.Equals(SearchFieldType.Program))
+            {
+                searchViewModel.ConsumerResults = null;
+                searchViewModel.CaseManagerResults = null;
+            }
+
             return View(searchViewModel);
         }
 
