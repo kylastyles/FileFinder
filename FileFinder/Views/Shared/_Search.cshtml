@@ -1,0 +1,30 @@
+﻿@model  FileFinder.ViewModels.SearchViewModel
+
+<form asp-controller="Search" asp-action="Results" method="post">
+    <p>
+        @*@foreach (SelectListItem column in Model.Columns)
+        {
+
+            var checkedColumn = column.Equals(Model.SelectedColumn);
+
+            <span>
+                <input type="radio" name="SelectedColumn" id="@column" value="@checkedColumn" />
+                <label for="@column">@column</label>
+            </span>
+        }*@
+
+        <div class="form-group">
+            <label asp-for="SelectedColumn"></label>
+            <select asp-for="SelectedColumn" asp-items="@Model.Columns" class="form-control"></select>
+            <span asp-validation-for="SelectedColumn"></span>
+        </div>
+
+    </p>
+
+    <p>
+        <label asp-for="UserInput"></label>
+        <input asp-for="UserInput" />
+    </p>
+
+    <input type="Submit" value="Search" />
+</form>

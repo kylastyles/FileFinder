@@ -26,12 +26,12 @@
 </div>
 <p></p>
 <div>
-    @if (Model.Files != null)
+
+    @if(ViewData["files"] != null)
     {
-        @foreach (var file in Model.Files)
+        foreach(var file in (List<File>)ViewData["files"])
         {
-            // TODO: Fix Room Details to show better file details
-            <p><a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID"> @Html.DisplayFor(modelItem => file.ConsumerID) </a></p>
+            <p><a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID"> @file.Consumer.LastName </a></p>
 
         }
 

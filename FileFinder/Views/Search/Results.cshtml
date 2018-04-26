@@ -1,8 +1,22 @@
-﻿@model FileFinder.ViewModels.SearchViewModel
+﻿@model FileFinder.ViewModels.HomeViewModel
 
+// TODO Show "All Results" when "All" and empty string are passed in.
+@if (Model.UserInput == "" && Model.SelectedColumn == SearchFieldType.All)
+{
+    <h2>All Results</h2>
+} else
+{
+    <h2>Results for "@Model.UserInput"</h2>
+}
 
-<h2>Results for "@Model.UserInput"</h2>
-<br />
+<p><a asp-controller="Home" asp-action="Index">Search Again</a></p>
+<hr />
+
+@if(Model.ConsumerResults == null && Model.CaseManagerResults == null && Model.ProgramResults == null)
+{
+    <h3> No Results.</h3>
+
+}
 
 @if (Model.ConsumerResults != null)
 {

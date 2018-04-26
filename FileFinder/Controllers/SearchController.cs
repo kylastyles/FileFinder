@@ -8,7 +8,6 @@ using FileFinder.Models;
 using FileFinder.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FileFinder.Controllers
 {
@@ -22,42 +21,40 @@ namespace FileFinder.Controllers
         }
 
         // GET: /<controller>/
-        public IActionResult Index()
-        {
-            SearchViewModel searchViewModel = new SearchViewModel();
+        //public IActionResult Index()
+        //{
+        //    SearchViewModel searchViewModel = new SearchViewModel();
 
-            return View(searchViewModel);
-        }
-    
+        //    return View(searchViewModel);
+        //}
+
 
         [HttpPost]
-        public IActionResult Results(SearchViewModel searchViewModel)
+        public IActionResult Results(HomeViewModel homeViewModel)
         {
-            //Populate All Results Fields
-            searchViewModel.ConsumerResults = _context.SearchConsumers(searchViewModel.UserInput);
-            searchViewModel.CaseManagerResults = _context.SearchCaseManagers(searchViewModel.UserInput);
-            searchViewModel.ProgramResults = _context.SearchPrograms(searchViewModel.UserInput);
 
-            //Remove fields not selected by user
-            if (searchViewModel.SelectedColumn.Equals(SearchFieldType.Consumer))
+            if (homeViewModel.SelectedColumn.Equals(SearchFieldType.Consumer))
             {
-                searchViewModel.CaseManagerResults = null;
-                searchViewModel.ProgramResults = null;
+                homeViewModel.ConsumerResults = _context.SearchConsumers(homeViewModel.UserInput);
+
+            }
+            else if (homeViewModel.SelectedColumn.Equals(SearchFieldType.CaseManager))
+            {
+                homeViewModel.CaseManagerResults = _context.SearchCaseManagers(homeViewModel.UserInput);
+
+            }
+            else if (homeViewModel.SelectedColumn.Equals(SearchFieldType.Program))
+            {
+                homeViewModel.ProgramResults = _context.SearchPrograms(homeViewModel.UserInput);
+            }
+            else // "All"
+            {
+                homeViewModel.ConsumerResults = _context.SearchConsumers(homeViewModel.UserInput);
+                homeViewModel.CaseManagerResults = _context.SearchCaseManagers(homeViewModel.UserInput);
+                homeViewModel.ProgramResults = _context.SearchPrograms(homeViewModel.UserInput);
             }
 
-            if (searchViewModel.SelectedColumn.Equals(SearchFieldType.CaseManager))
-            {
-                searchViewModel.ConsumerResults = null;
-                searchViewModel.ProgramResults = null;
-            }
-
-            if (searchViewModel.SelectedColumn.Equals(SearchFieldType.Program))
-            {
-                searchViewModel.ConsumerResults = null;
-                searchViewModel.CaseManagerResults = null;
-            }
-
-            return View(searchViewModel);
+            return View(homeViewModel);
         }
 
 

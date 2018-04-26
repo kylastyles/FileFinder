@@ -1,4 +1,4 @@
-﻿@model FileFinder.ViewModels.SearchViewModel
+﻿@model FileFinder.ViewModels.HomeViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -6,25 +6,24 @@
 
 <div class="jumbotron"><h1>FileFinder</h1></div>
 
+<!--  Search Feature  -->
+<h2>Search</h2>
+<br />
 
-<h2>Consumer Query</h2>
-<p>
+@*@{ Html.RenderPartial("_Search"); }*@
 
-</p>
-
-<!--  form  -->
-<form asp-controller="Home" asp-action="Search" method="post">
+<form asp-controller="Search" asp-action="Results" method="post">
     <p>
         @foreach (var column in Model.Columns)
-        {
+            {
 
-            var checkedColumn = column.Equals(Model.SelectedColumn);
+                var checkedColumn = column.Equals(Model.SelectedColumn);
 
-            <span>
-                <input type="radio" name="SelectedColumn" id="@column" value="@column" checked="@checkedColumn"/>
-                <label for="@column">@column</label>
-            </span>
-        }
+                <span>
+                    <input type="radio" name="SelectedColumn" id="@column" value="@column" checked="@checkedColumn" />
+                    <label for="@column">@column</label>
+                </span>
+            }
     </p>
 
     <p>
@@ -37,38 +36,43 @@
 
 <hr />
 
-<!--  results  -->
+<!--  Daily Tasks Feature  -->
+<h2>Daily Tasks for @Model.Today.DayOfWeek, @Model.Today.ToShortDateString() </h2>
 
-@if (Model.ConsumerResults != null)
-{
-    <h3>Consumers</h3>
-    <br />
-    @foreach (var result in Model.ConsumerResults)
+    @if (Model.ActionFiles != null)
     {
-        <p><a asp-controller="Consumers" asp-action="Details" asp-route-id="@result.ID">@result.FullName()</a></p>
-    }
-    <br />
-}
+        <h4>Files to Refresh</h4>
+        <table>
 
-@if (Model.CaseManagerResults != null)
-{
-    <h3>Case Managers</h3>
-    <br />
-    @foreach (var result in Model.CaseManagerResults)
-    {
-        <p><a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@result.ID">@result.FullName()</a></p>
-    }
-    <br />
-}
+            @foreach (var file in Model.ActionFiles)
+            {
+                <tr>
+                    <td>
+                        @Html.Partial("_File", file)
+                    </td>
+                </tr>
+            }
 
-@if (Model.ProgramResults != null)
-{
-    <h3>Programs</h3>
-    <br />
-
-    @foreach (var result in Model.ProgramResults)
-    {
-        <p><a asp-controller="Programs" asp-action="Details" asp-route-id="@result.ID">@result.Name</a></p>
+        </table>
     }
 
-}
+
+    @if (Model.InactiveFiles != null)
+    {
+        <h4>Files to Shred</h4>
+        <table>
+
+            @foreach (var file in Model.InactiveFiles)
+            {
+                <tr>
+                    <td>
+                        @Html.Partial("_File", file)
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    }
+
+@*@{ Html.RenderPartial("_DailyTasks"); }*@

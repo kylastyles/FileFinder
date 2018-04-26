@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileFinder.Models;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FileFinder.ViewModels
 {
@@ -13,19 +14,18 @@ namespace FileFinder.ViewModels
         [Display(Name = "Search Term: ")]
         public string UserInput { get; set; }
 
-        public SearchFieldType SelectedColumn { get; set; }
+        public string SelectedColumn { get; set; }
 
-        public List<SearchFieldType> Columns = new List<SearchFieldType>
-        {
-            SearchFieldType.All,
-            SearchFieldType.CaseManager,
-            SearchFieldType.Consumer,
-            SearchFieldType.Program
-        };
-
-        //public List<Consumer> ConsumerResults = new List<Consumer>();
-        //public List<CaseManager> CaseManagerResults = new List<CaseManager>();
-        //public List<Models.Program> ProgramResults = new List<Models.Program>();
+        public IEnumerable<SelectListItem> Columns
+        { get
+            {
+                return Enum.GetValues(typeof(SearchFieldType)).Cast<SearchFieldType>().Select(s => new SelectListItem
+                {
+                    Text = s.ToString(),
+                    Value = ((int)s).ToString()
+                }).ToList();
+            }
+        }
 
         public List<Consumer> ConsumerResults { get; set; }
         public List<CaseManager> CaseManagerResults { get; set; }
@@ -33,9 +33,7 @@ namespace FileFinder.ViewModels
 
         public SearchViewModel()
         {
-
-
-
+            SelectedColumn = SearchFieldType.All.ToString();
 
         }
 

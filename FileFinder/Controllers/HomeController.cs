@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using FileFinder.Models;
 using FileFinder.ViewModels;
 using FileFinder.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FileFinder.Controllers
 {
@@ -21,35 +23,44 @@ namespace FileFinder.Controllers
 
         public IActionResult Index()
         {
-            SearchViewModel searchViewModel = new SearchViewModel();
+            // For Search
+            HomeViewModel homeViewModel = new HomeViewModel();
 
-            return View(searchViewModel);
+            // For Daily Tasks
+            homeViewModel.ActionFiles = _context.Files
+                                        .Where(f => f.Status == Status.Damaged || f.Status == Status.Full)
+                                        .Include(f => f.Consumer)
+                                        .Include(f => f.CaseManager)
+                                        .Include(f => f.Room);
+
+            homeViewModel.InactiveFiles = _context.Files
+                                        .Where(f => f.Status == Status.InactiveConsumer)
+                                        .Include(f => f.Consumer)
+                                        .Include(f => f.CaseManager)
+                                        .Include(f => f.Room);
+
+            return View(homeViewModel);
         }
 
-        [HttpPost]
-        public IActionResult Search(SearchViewModel searchViewModel)
-        {
+        // <----------- PARTIAL VIEW EXPERIMENTS -------------->
 
-            if (searchViewModel.SelectedColumn.Equals(SearchFieldType.Consumer))
-            {
-                searchViewModel.ConsumerResults = _context.SearchConsumers(searchViewModel.UserInput);
+        //public IActionResult Search()
+        //{
+        //    SearchViewModel searchViewModel = new SearchViewModel();
 
-            } else if (searchViewModel.SelectedColumn.Equals(SearchFieldType.CaseManager))
-            {
-                searchViewModel.CaseManagerResults = _context.SearchCaseManagers(searchViewModel.UserInput);
+        //    return PartialView("_Search", searchViewModel);
+        //}
 
-            } else if (searchViewModel.SelectedColumn.Equals(SearchFieldType.Program))
-            {
-                searchViewModel.ProgramResults = _context.SearchPrograms(searchViewModel.UserInput);
-            } else // "All"
-            {
-                searchViewModel.ConsumerResults = _context.SearchConsumers(searchViewModel.UserInput);
-                searchViewModel.CaseManagerResults = _context.SearchCaseManagers(searchViewModel.UserInput);
-                searchViewModel.ProgramResults = _context.SearchPrograms(searchViewModel.UserInput);
-            }
 
-            return View("Index", searchViewModel);
-        }
+        //// TODO: Make Daily Tasks List
+        //public IActionResult DailyTasks()
+        //{
+        //    var query = from file in _context.Files.Include("Consumers")
+        //                where file.Status != Status.OK || file.Status != null
+        //                select file;
+
+        //    return PartialView("_DailyTasks", query);
+        //}
 
         public IActionResult Error()
         {

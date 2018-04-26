@@ -41,7 +41,10 @@ namespace FileFinder.Controllers
                 .SingleOrDefaultAsync(m => m.ID == id);
 
             // TODO: Add files to rooms
-            room.Files = _context.Files.Where(f => f.RoomID == room.ID).ToList();
+            //room.Files = _context.Files.Where(f => f.RoomID == room.ID).ToList();
+            // Step 2, query File table to get relevent data
+
+            ViewData["files"] = _context.Files.Where(f => f.RoomID == room.ID).ToList();
 
             if (room == null)
             {

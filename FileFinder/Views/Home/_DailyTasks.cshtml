@@ -1,0 +1,39 @@
+﻿@model IEnumerable<FileFinder.Models.File>
+
+<h2>Daily Tasks for @ViewData["day"], @ViewData["dt"] </h2>
+
+@if (ViewData["actionFiles"] != null)
+{
+    <h4>Files to Refresh</h4>
+    <table>
+
+        @foreach (var file in ViewData["actionFiles"] as IEnumerable<FileFinder.Models.File>)
+        {
+            <tr>
+                <td>
+                    @Html.Partial("_File", file)
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+
+@if (ViewData["inactiveFiles"] != null)
+{
+    <h4>Files to Shred</h4>
+    <table>
+
+        @foreach (var file in ViewData["inactiveFiles"] as IEnumerable<FileFinder.Models.File>)
+        {
+            <tr>
+                <td>
+                    @Html.Partial("_File", file)
+                </td>
+            </tr>
+        }
+
+    </table>
+
+}

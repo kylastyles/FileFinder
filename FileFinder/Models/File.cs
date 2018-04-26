@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace FileFinder.Models
 {
@@ -20,13 +22,20 @@ namespace FileFinder.Models
         public Status? Status { get; set; }
         public DateTime? ShredDate { get; set; }
 
+        [ForeignKey("Consumer")]
         public int ConsumerID { get; set; }
+
         public Consumer Consumer { get; set; }
 
+        [ForeignKey("CaseManager")]
         public int CaseManagerID { get; set; }
+
+        [Display(Name = "Case Manager")]
         public CaseManager CaseManager { get; set; }
 
+        [ForeignKey("Room")]
         public int RoomID { get; set; }
+        //[ForeignKey("Room")]
         public Room Room { get; set; }
 
         public override bool Equals(object obj)
