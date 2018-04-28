@@ -1,4 +1,4 @@
-﻿@model FileFinder.Models.Consumer
+﻿@model FileFinder.ViewModels.EditConsumerViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -37,6 +37,7 @@
             </div>
             @if(Model.Active == false)
             {
+                <!--TODO: immediate jQuery response to change in the Active checkbox-->
                 <div class="form-group">
                     <label asp-for="EndDate" class="control-label"></label>
                     <input asp-for="EndDate" class="form-control" />

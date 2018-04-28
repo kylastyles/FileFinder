@@ -43,6 +43,12 @@ namespace FileFinder.Controllers
                 return NotFound();
             }
 
+            // Add files to case manager
+            caseManager.Files = _context.Files.Where(f => f.CaseManagerID == caseManager.ID)
+                        .Include(f => f.Consumer)
+                        .Include(f => f.Room)
+                        .ToList();
+
             return View(caseManager);
         }
 
@@ -55,23 +61,6 @@ namespace FileFinder.Controllers
 
             return View(createCMVM);
         }
-
-        // POST: CaseManagers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("ID,Email,PhoneNumber,ProgramID,LastName,FirstName")] CaseManager caseManager)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(caseManager);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["Program"] = new SelectList(_context.Programs, "ID", "Name", caseManager.Program);
-        //    return View(caseManager);
-        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -100,23 +89,7 @@ namespace FileFinder.Controllers
             return View(createCMVM);
         }
 
-        // GET: CaseManagers/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var caseManager = await _context.CaseManagers.SingleOrDefaultAsync(m => m.ID == id);
-        //    if (caseManager == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["ProgramID"] = new SelectList(_context.Programs, "Name", "Name", caseManager.Program.Name);
-        //    return View(caseManager);
-        //}
-
+        //GET: CaseManagers/Edit
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -125,6 +98,10 @@ namespace FileFinder.Controllers
             }
 
             CaseManager CMtoEdit = _context.CaseManagers.Single(cm => cm.ID == id);
+            if (CMtoEdit == null)
+            {
+                return NotFound();
+            }
 
             EditCaseManagerViewModel EditCMVM = new EditCaseManagerViewModel
             {
@@ -148,6 +125,7 @@ namespace FileFinder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Email,PhoneNumber,ProgramID,LastName,FirstName")] CaseManager caseManager)
         {
+            //TODO: Post with EditCaseManagerViewModel
             if (id != caseManager.ID)
             {
                 return NotFound();

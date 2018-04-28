@@ -49,8 +49,9 @@ namespace FileFinder.Controllers
         }
 
         // GET: Files/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
+            // Make ViewModel
             CreateFileViewModel createFileVM = new CreateFileViewModel
             {
                 CaseManagers = _context.CaseManagers.Select(cm => new SelectListItem() { Value = cm.ID.ToString(), Text = cm.FullName() }).ToList(),
@@ -58,16 +59,16 @@ namespace FileFinder.Controllers
                 Rooms = _context.Rooms.Select(r => new SelectListItem() { Value = r.ID.ToString(), Text = r.Name }).ToList()
             };
 
-            //ViewData["CaseManagerID"] = _context.CaseManagers.Select(p => new SelectListItem() { Value = p.ID.ToString(), Text = p.FullName() }).ToList();
-            //ViewData["ConsumerID"] = _context.Consumers.Select(p => new SelectListItem() { Value = p.ID.ToString(), Text = p.FullName() }).ToList();
-            //ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "Name");
+            // Add Consumer name if id was passed in
+            if (id != null)
+            {
+                createFileVM.ConsumerID = (int)id;
+            }
 
             return View(createFileVM);
         }
 
         // POST: Files/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateFileViewModel createFilevm)
@@ -97,10 +98,6 @@ namespace FileFinder.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            //Is this stuff needed? Will Model ever not be valid? -K 4/20/18 8:23pm
-            //ViewData["CaseManagerID"] = new SelectList(_context.CaseManagers, "ID", "FirstName", file.CaseManagerID);
-            //ViewData["ConsumerID"] = new SelectList(_context.Consumers, "ID", "FirstName", file.ConsumerID);
-            //ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID", file.RoomID);
             return View(createFilevm);
         }
 
@@ -135,49 +132,37 @@ namespace FileFinder.Controllers
                 ShredDate = file.ShredDate
             };
 
-            //ViewData["CaseManagerID"] = new SelectList(_context.CaseManagers, "ID", "FirstName", file.CaseManagerID);
-            //ViewData["ConsumerID"] = new SelectList(_context.Consumers, "ID", "FirstName", file.ConsumerID);
-            //ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID", file.RoomID);
             ViewData["StatusList"] = new SelectList(Enum.GetNames(typeof(Status)));
             return View(editFilevm);
         }
 
         // POST: Files/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Quantity,Status,ShredDate,ConsumerID,CaseManagerID,RoomID")] File file)
+        public async Task<IActionResult> Edit(EditFileViewModel editFileViewModel)
         {
-            if (id != file.ID)
+            if(ModelState.IsValid)
             {
-                return NotFound();
-            }
+                //Find file
+                File fileToEdit = await _context.Files.SingleAsync(f => f.ID == editFileViewModel.ID);
+                if (fileToEdit == null)
+                {
+                    return NotFound();
+                }
+                //Set changes
+                fileToEdit.Quantity = editFileViewModel.Quantity;
+                fileToEdit.ConsumerID = editFileViewModel.ConsumerID;
+                fileToEdit.CaseManagerID = editFileViewModel.CaseManagerID;
+                fileToEdit.RoomID = editFileViewModel.RoomID;
+                fileToEdit.Status = editFileViewModel.Status;
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(file);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FileExists(file.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _context.Update(fileToEdit);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CaseManagerID"] = new SelectList(_context.CaseManagers, "ID", "FirstName", file.CaseManagerID);
-            ViewData["ConsumerID"] = new SelectList(_context.Consumers, "ID", "FirstName", file.ConsumerID);
-            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID", file.RoomID);
-            return View(file);
+
+            return View(editFileViewModel);
         }
 
         // GET: Files/Delete/5

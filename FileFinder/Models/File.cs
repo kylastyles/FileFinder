@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using FileFinder.ViewModels;
 
 namespace FileFinder.Models
 {
@@ -17,10 +18,13 @@ namespace FileFinder.Models
 
     public class File
     {
+    // FIELDS
         public int ID { get; set; }
         public int Quantity { get; set; } = 1;
         public Status? Status { get; set; }
-        public DateTime? ShredDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime? ShredDate { get; private set; }
 
         [ForeignKey("Consumer")]
         public int ConsumerID { get; set; }
@@ -38,13 +42,25 @@ namespace FileFinder.Models
         //[ForeignKey("Room")]
         public Room Room { get; set; }
 
+    // METHODS
+
+        public void SetShredDate(EditConsumerViewModel consumerVM)
+        {
+            if(consumerVM.EndDate.HasValue)
+            {
+                DateTime newDate = consumerVM.EndDate.Value;
+                this.ShredDate = newDate.AddYears(7).AddDays(1);
+            }
+        }
+
         public override bool Equals(object obj)
         {
+            // Is it same object?
             if(obj == this)
             {
                 return true;
             }
-
+            // Is it null or not same type?
             if(obj == null || obj.GetType() != GetType())
             {
                 return false;

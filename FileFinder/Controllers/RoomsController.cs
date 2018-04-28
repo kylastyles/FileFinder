@@ -40,11 +40,12 @@ namespace FileFinder.Controllers
                 .Include(r => r.Building)
                 .SingleOrDefaultAsync(m => m.ID == id);
 
-            // TODO: Add files to rooms
-            //room.Files = _context.Files.Where(f => f.RoomID == room.ID).ToList();
-            // Step 2, query File table to get relevent data
+            // Add files to rooms
+            room.Files = _context.Files.Where(f => f.RoomID == room.ID)
+                        .Include(f => f.Consumer)
+                        .Include(f => f.CaseManager)
+                        .ToList();
 
-            ViewData["files"] = _context.Files.Where(f => f.RoomID == room.ID).ToList();
 
             if (room == null)
             {

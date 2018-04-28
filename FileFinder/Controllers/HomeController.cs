@@ -23,10 +23,10 @@ namespace FileFinder.Controllers
 
         public IActionResult Index()
         {
-            // For Search
+            // For Search:
             HomeViewModel homeViewModel = new HomeViewModel();
 
-            // For Daily Tasks
+            // For Daily Tasks:
             homeViewModel.ActionFiles = _context.Files
                                         .Where(f => f.Status == Status.Damaged || f.Status == Status.Full)
                                         .Include(f => f.Consumer)
@@ -34,7 +34,7 @@ namespace FileFinder.Controllers
                                         .Include(f => f.Room);
 
             homeViewModel.InactiveFiles = _context.Files
-                                        .Where(f => f.Status == Status.InactiveConsumer)
+                                        .Where(f => f.ShredDate <= homeViewModel.Today)
                                         .Include(f => f.Consumer)
                                         .Include(f => f.CaseManager)
                                         .Include(f => f.Room);
@@ -52,7 +52,6 @@ namespace FileFinder.Controllers
         //}
 
 
-        //// TODO: Make Daily Tasks List
         //public IActionResult DailyTasks()
         //{
         //    var query = from file in _context.Files.Include("Consumers")

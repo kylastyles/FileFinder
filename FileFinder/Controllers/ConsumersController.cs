@@ -29,7 +29,6 @@ namespace FileFinder.Controllers
         // GET: Consumer/Details/5 
         public async Task<IActionResult> Details(int? id)
         {
-            // TODO: Add Files to Consumer Details
             if (id == null)
             {
                 return NotFound();
@@ -41,6 +40,12 @@ namespace FileFinder.Controllers
             {
                 return NotFound();
             }
+
+            // Add files to consumer
+            consumer.Files = _context.Files.Where(f => f.ConsumerID == consumer.ID)
+                        .Include(f => f.CaseManager)
+                        .Include(f => f.Room)
+                        .ToList();
 
             return View(consumer);
         }
@@ -54,11 +59,8 @@ namespace FileFinder.Controllers
         }
 
         // POST: Consumer/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("ID,DOB,Active,LastName,FirstName")] Consumer consumer)
         public async Task<IActionResult> Create(CreateConsumerViewModel createConsumerVM)
         {
             if (ModelState.IsValid)
@@ -86,48 +88,108 @@ namespace FileFinder.Controllers
                 return NotFound();
             }
 
-            var consumer = await _context.Consumers.SingleOrDefaultAsync(m => m.ID == id);
-            if (consumer == null)
+            // Find consumer
+            Consumer consumerToEdit = await _context.Consumers.SingleOrDefaultAsync(m => m.ID == id);
+            if (consumerToEdit == null)
             {
                 return NotFound();
             }
-            return View(consumer);
+
+            EditConsumerViewModel editConsumerVM = new EditConsumerViewModel
+            {
+                ID = consumerToEdit.ID,
+                LastName = consumerToEdit.LastName,
+                FirstName = consumerToEdit.FirstName,
+                DOB = consumerToEdit.DOB,
+                Active = consumerToEdit.Active,
+                EndDate = consumerToEdit.EndDate
+            };
+
+            return View(editConsumerVM);
         }
 
         // POST: Consumer/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,DOB,Active,LastName,FirstName")] Consumer consumer)
+        public async Task<IActionResult> Edit(EditConsumerViewModel editConsumerVM)
         {
-            if (id != consumer.ID)
+            if(ModelState.IsValid)
             {
-                return NotFound();
-            }
+                //Get consumer
+                Consumer consumerToEdit = _context.Consumers.Single(c => c.ID == editConsumerVM.ID);
+                // Get associated files
+                consumerToEdit.Files = _context.Files.Where(f => f.ConsumerID == consumerToEdit.ID).ToList();
 
-            // TODO: Make EditConsumerViewModel
-            if (ModelState.IsValid)
-            {
-                try
+                consumerToEdit.LastName = editConsumerVM.LastName;
+                consumerToEdit.FirstName = editConsumerVM.FirstName;
+                consumerToEdit.DOB = editConsumerVM.DOB;
+
+                // ONLY when a consumer's active state is changed (so it won't affect file statuses otherwise):
+                if (editConsumerVM.Active != consumerToEdit.Active)
                 {
-                    _context.Update(consumer);
-                    await _context.SaveChangesAsync();
+                    // If consumer becomes inactive, add EndDate 
+                    if (editConsumerVM.Active == false)
+                    {
+                        consumerToEdit.Active = false;
+                        consumerToEdit.EndDate = editConsumerVM.EndDate;
+                        if(consumerToEdit.Files != null)
+                        {
+                            // Change status of files to "InactiveConsumer" and set file ShredDate
+                            foreach (File file in consumerToEdit.Files)
+                            {
+                                file.Status = Status.InactiveConsumer;
+                                file.SetShredDate(editConsumerVM);
+                                _context.Update(file);
+                            }
+                        }
+                    }
+
+                    // If inactive consumer becomes active, wipe EndDate and change status of files to "OK"
+                    if (editConsumerVM.Active == true)
+                    {
+                        consumerToEdit.Active = true;
+                        consumerToEdit.EndDate = null;
+                        if (consumerToEdit.Files != null)
+                        {
+                            foreach (File file in consumerToEdit.Files)
+                            {
+                                file.Status = Status.OK;
+                                file.SetShredDate(null);
+                                _context.Update(file);
+                            }
+                        }
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+
+                // If the active state remains unchanged, but an inactive consumer's EndDate is changed:
+                if (editConsumerVM.EndDate != consumerToEdit.EndDate)
                 {
-                    if (!ConsumerExists(consumer.ID))
+                    // NOT that we'll allow it to be wiped...
+                    if (editConsumerVM.EndDate == null && editConsumerVM.Active == false)
                     {
-                        return NotFound();
+                        consumerToEdit.EndDate = DateTime.Now;
+                    } else // Otherwise, set the change to the consumer
+                    {
+                        consumerToEdit.EndDate = editConsumerVM.EndDate;
                     }
-                    else
+                    // Update their files' ShredDate
+                    if(consumerToEdit.Files != null)
                     {
-                        throw;
+                        foreach (File file in consumerToEdit.Files)
+                        {
+                            file.SetShredDate(editConsumerVM);
+                            _context.Update(file);
+                        }
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(consumer);
+
+                _context.Update(consumerToEdit);
+                await _context.SaveChangesAsync();
+
+                return Redirect("/Consumers/");
+            };
+
+            return View(editConsumerVM);
         }
 
         // GET: Consumer/Delete/5

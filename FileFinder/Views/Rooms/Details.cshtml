@@ -7,7 +7,7 @@
 <h2>Room Details</h2>
 
 <div>
-    <h4>@Model.Name</h4>
+    <h3>@Model.Name</h3>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -25,20 +25,66 @@
     </dl>
 </div>
 <p></p>
-<div>
 
-    @if(ViewData["files"] != null)
-    {
-        foreach(var file in (List<File>)ViewData["files"])
-        {
-            <p><a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID"> @file.Consumer.LastName </a></p>
-
-        }
-
-    }
-
-</div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
     <a asp-action="Index">Back to Room List</a>
 </div>
+
+<div>
+
+    <hr />
+
+    <h4>Files</h4>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p>Quantity</p>
+                </th>
+                <th>
+                    <p>Status</p>
+                </th>
+                <th>
+                    <p>Consumer</p>
+                </th>
+                <th>
+                    <p>Case Manager</p>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Files)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <a asp-controller="Consumers" asp-action="Details" asp-route-id="@item.ConsumerID">
+                        @Html.DisplayFor(modelItem => item.Consumer.LastName), @Html.DisplayFor(modelItem => item.Consumer.FirstName)
+                    </a>
+                </td>
+                <td>
+                    <a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@item.CaseManagerID">
+                        @Html.DisplayFor(modelItem => item.CaseManager.LastName), @Html.DisplayFor(modelItem => item.CaseManager.FirstName)
+                    </a>
+                </td>
+                <td>
+                    <a asp-controller="Files" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-controller="Files" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-controller="Files" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+
+
+</div>
+
