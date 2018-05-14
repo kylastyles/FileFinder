@@ -27,6 +27,13 @@ namespace FileFinder
 
             var connection = @"Server=(localdb)\mssqllocaldb;Database=FileFinder;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<FileFinderContext>(options => options.UseSqlServer(connection));
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,11 +51,13 @@ namespace FileFinder
 
             app.UseStaticFiles();
 
+            app.UseSession();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Login}/{id?}");
             });
         }
     }

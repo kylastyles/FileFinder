@@ -137,7 +137,6 @@ namespace FileFinder.Controllers
                             // Change status of files to "InactiveConsumer" and set file ShredDate
                             foreach (File file in consumerToEdit.Files)
                             {
-                                file.Status = Status.InactiveConsumer;
                                 file.SetShredDate(editConsumerVM);
                                 _context.Update(file);
                             }

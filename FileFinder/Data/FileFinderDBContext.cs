@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FileFinder.Models;
+using System.Security.Cryptography;
 
 namespace FileFinder.Data
 {
@@ -20,6 +21,7 @@ namespace FileFinder.Data
         public DbSet<Models.Program> Programs { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<FileMember> FileMembers { get; set; }
 
 
         public List<Consumer> SearchConsumers(string value)
@@ -95,5 +97,19 @@ namespace FileFinder.Data
 
             return true;
         }
+
+        public static string Hash(string stringToHash)
+        {
+            using (var sha1 = new SHA1Managed())
+            {
+                return BitConverter.ToString(sha1.ComputeHash(System.Text.Encoding.UTF8.GetBytes(stringToHash)));
+            }
+        }
+
+        public static string Decode(string stringToDecode)
+        {
+
+        }
+
     }
 }

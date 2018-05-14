@@ -3,10 +3,10 @@
 <div>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Quantity)
+           @Html.DisplayNameFor(model => model.Quantity)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Quantity)
+           @Html.DisplayFor(model => model.Quantity)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Consumer)
@@ -18,7 +18,7 @@
             @Html.DisplayNameFor(model => model.CaseManager)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CaseManager.LastName), @Html.DisplayFor(model => model.CaseManager.FirstName)
+             @Html.DisplayFor(model => model.CaseManager.LastName), @Html.DisplayFor(model => model.CaseManager.FirstName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Status)
@@ -26,21 +26,22 @@
         <dd>
             @Html.DisplayFor(model => model.Status)
         </dd>
-        @if (Model.Status == Status.InactiveConsumer)
-        {
+            @if (Model.Status == Status.Inactive)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.ShredDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.ShredDate)
+                </dd>
+            }
             <dt>
-                @Html.DisplayNameFor(model => model.ShredDate)
+                @Html.DisplayNameFor(model => model.Room)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.ShredDate)
+                @Html.DisplayFor(model => model.Room.Name)
             </dd>
-         }
-        <dt>
-            @Html.DisplayNameFor(model => model.Room)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Room.Name)
-        </dd>
-    </dl>
+            </dl>
+    
 </div>
 

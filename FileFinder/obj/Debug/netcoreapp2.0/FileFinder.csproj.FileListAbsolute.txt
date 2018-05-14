@@ -9,3 +9,4 @@ C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\obj\Debug\netcoreapp2.0\F
 C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\bin\Debug\netcoreapp2.0\FileFinder.pdb
 C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\obj\Debug\netcoreapp2.0\FileFinder.dll
 C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\obj\Debug\netcoreapp2.0\FileFinder.pdb
+C:\Users\Tiger Lily\source\repos\FileFinder\FileFinder\bin\Debug\netcoreapp2.0\FileFinder.dll.config

@@ -22,7 +22,7 @@ namespace FileFinder.Controllers
         // GET: Buildings
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Buildings.OrderBy(b => b.Name).ToListAsync());
+            return View(await _context.Buildings.OrderBy(b => b.Name).Include(b => b.Rooms).ToListAsync());
         }
 
         // GET: Buildings/Details/5

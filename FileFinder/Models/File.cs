@@ -11,17 +11,21 @@ namespace FileFinder.Models
     public enum Status
     {
         OK,
-        InactiveConsumer,
+        Inactive,
         Full,
-        Damaged
+        Damaged,
+        New,
+        Shred
     }
+
+
 
     public class File
     {
     // FIELDS
         public int ID { get; set; }
         public int Quantity { get; set; } = 1;
-        public Status? Status { get; set; }
+        public Status Status { get; set; } = Status.OK;
 
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? ShredDate { get; private set; }
@@ -39,17 +43,26 @@ namespace FileFinder.Models
 
         [ForeignKey("Room")]
         public int RoomID { get; set; }
-        //[ForeignKey("Room")]
         public Room Room { get; set; }
 
-    // METHODS
+        public Dictionary<Status, string> Icons = new Dictionary<Status, string>
+        {
+            {Models.Status.OK, "../images/FilePNGs/clr-normal.png" },
+            {Models.Status.Damaged, "../images/FilePNGs/clr-damaged.png"},
+            {Models.Status.Full, "../images/FilePNGs/clr-full.png"},
+            {Models.Status.Inactive, "../images/FilePNGs/blk-normal.png"},
+            {Models.Status.New, "../images/FilePNGs/clr-new.png"},
+            {Models.Status.Shred, "../images/FilePNGs/clr-shred.png" }
+        };
+
+        // METHODS
 
         public void SetShredDate(EditConsumerViewModel consumerVM)
         {
             if(consumerVM.EndDate.HasValue)
             {
-                DateTime newDate = consumerVM.EndDate.Value;
-                this.ShredDate = newDate.AddYears(7).AddDays(1);
+                this.ShredDate = consumerVM.EndDate.Value.AddYears(7).AddDays(1);
+                this.Status = Models.Status.Inactive;
             }
         }
 
@@ -75,6 +88,12 @@ namespace FileFinder.Models
         {
             //return base.GetHashCode();
             return ID;
+        }
+
+
+        public string GetStatusIcon()
+        {
+            return Icons[this.Status];
         }
     }
 }

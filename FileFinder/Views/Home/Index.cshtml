@@ -6,7 +6,7 @@
 
 <div class="jumbotron"><h1>FileFinder</h1></div>
 
-<!--  Search Feature  -->
+                                                <!--  Search Feature  -->
 <h2>Search</h2>
 <br />
 
@@ -36,43 +36,63 @@
 
 <hr />
 
-<!--  Daily Tasks Feature  -->
-<h2>Daily Tasks for @Model.Today.DayOfWeek, @Model.Today.ToShortDateString() </h2>
+                                                <!--  Daily Tasks Feature  -->
+
+    <div class="row">
+        <div class="col text-center">
+            <h2>Daily Tasks - @Model.Today.DayOfWeek, @Model.Today.ToShortDateString() </h2>
+        </div>
+    </div>
 
     @if (Model.ActionFiles != null)
     {
-        <h4>Files to Refresh</h4>
-        <table>
+        <div class="row">
+            <div class="col special-subheading">
+                <h4>Files to Refresh</h4>
+            </div>
+        </div>
 
-            @foreach (var file in Model.ActionFiles)
-            {
-                <tr>
-                    <td>
-                        @Html.Partial("_File", file)
-                    </td>
-                </tr>
-            }
-
-        </table>
+        @foreach (var file in Model.ActionFiles)
+        {
+            <div class="row"> 
+                <div class="col-sm-2">
+                    <img src="@file.GetStatusIcon()" />
+                </div>
+                <div class="col-sm-6">
+                    @Html.Partial("_File", file)
+                </div>
+                <div class="col-sm-4 text-center">
+                    <a asp-action="FileRefresh" asp-route-id="@file.ID">Refreshed!</a>
+                </div>
+            </div>
+        }
     }
-
 
     @if (Model.InactiveFiles != null)
     {
-        <h4>Files to Shred</h4>
-        <table>
+        <div class="row">
+            <div class="col special-subheading">
+                <h4>Files to Shred</h4>
+            </div>
+        </div>
 
-            @foreach (var file in Model.InactiveFiles)
-            {
-                <tr>
-                    <td>
-                        @Html.Partial("_File", file)
-                    </td>
-                </tr>
-            }
-
-        </table>
+        @foreach (var file in Model.InactiveFiles)
+        {
+            <div class="row">
+                <div class="col-sm-2">
+                    <img src="@file.GetStatusIcon()" />
+                </div>
+                <div class="col-sm-6">
+                    @Html.Partial("_File", file)
+                </div>
+                <div class="col-sm-4 text-center">
+                    <a asp-controller="Files" asp-action="Delete" asp-route-id="@file.ID">Delete</a>
+                </div>
+            </div>
+        }
 
     }
+
+
 
 @*@{ Html.RenderPartial("_DailyTasks"); }*@

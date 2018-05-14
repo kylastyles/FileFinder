@@ -12,17 +12,19 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Quantity)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Status)
-                </th>
+            <th>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.CaseManager)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Consumer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Room)
@@ -34,22 +36,28 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                <img src="@item.GetStatusIcon()" />
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                <a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@item.CaseManagerID">
+                    @Html.DisplayFor(modelItem => item.CaseManager.LastName), @Html.DisplayFor(modelItem => item.CaseManager.FirstName)
+                </a>
+            </td>
+            <td>
+                <a asp-controller="Consumers" asp-action="Details" asp-route-id="@item.ConsumerID">
+                    @Html.DisplayFor(modelItem => item.Consumer.LastName), @Html.DisplayFor(modelItem => item.Consumer.FirstName)
+                </a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                <a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@item.CaseManagerID">
-                @Html.DisplayFor(modelItem => item.CaseManager.LastName), @Html.DisplayFor(modelItem => item.CaseManager.FirstName) </a>
-            </td>
-            <td>
-                <a asp-controller="Consumers" asp-action="Details" asp-route-id="@item.ConsumerID">
-                @Html.DisplayFor(modelItem => item.Consumer.LastName), @Html.DisplayFor(modelItem => item.Consumer.FirstName) </a>
-            </td>
-            <td>
                 <a asp-controller="Rooms" asp-action="Details" asp-route-id="@item.RoomID">
-                @Html.DisplayFor(modelItem => item.Room.Name) </a>
+                    @Html.DisplayFor(modelItem => item.Room.Name)
+                </a>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

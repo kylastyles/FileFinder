@@ -8,12 +8,14 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link href="https://fonts.googleapis.com/css?family=IM+Fell+DW+Pica|IM+Fell+Double+Pica|IM+Fell+Double+Pica+SC" rel="stylesheet">
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link href="https://fonts.googleapis.com/css?family=IM+Fell+DW+Pica|IM+Fell+Double+Pica|IM+Fell+Double+Pica+SC" rel="stylesheet">
     </environment>
 </head>
 <body>
@@ -30,13 +32,12 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Consumers" asp-action="Index">Consumers</a></li>
                     <li><a asp-area="" asp-controller="Programs" asp-action="Index">Programs</a></li>
                     <li><a asp-area="" asp-controller="CaseManagers" asp-action="Index">Case Managers</a></li>
-                    <li><a asp-area="" asp-controller="Buildings" asp-action="Index">Buildings</a>
-                    <li><a asp-area="" asp-controller="Rooms" asp-action="Index">Rooms</a></li>
-                    <li><a asp-area="" asp-controller="Files" asp-action="Index">Files</a></li>
+                    <li><a asp-area="" asp-controller="Buildings" asp-action="Index">Locations</a>
+                    <li><a asp-area="" asp-controller="Files" asp-action="Index">All Files</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Logout">Log Out</a></li>
                 </ul>
             </div>
         </div>

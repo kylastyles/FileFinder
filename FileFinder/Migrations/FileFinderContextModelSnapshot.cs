@@ -98,7 +98,7 @@ namespace FileFinder.Migrations
 
                     b.Property<DateTime?>("ShredDate");
 
-                    b.Property<int?>("Status");
+                    b.Property<int>("Status");
 
                     b.HasKey("ID");
 
@@ -109,6 +109,28 @@ namespace FileFinder.Migrations
                     b.HasIndex("RoomID");
 
                     b.ToTable("Files");
+                });
+
+            modelBuilder.Entity("FileFinder.Models.FileMember", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("LastName")
+                        .IsRequired();
+
+                    b.Property<string>("Password");
+
+                    b.Property<int>("Role");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("FileMembers");
                 });
 
             modelBuilder.Entity("FileFinder.Models.Program", b =>

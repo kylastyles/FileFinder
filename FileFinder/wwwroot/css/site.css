@@ -10,15 +10,29 @@
     padding-right: 15px;
 }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
+.jumbotron {
+    background-image: url("../images/binder.jpg");
+    background-size: cover;
+    background-position: center center;
+    font-family: 'IM Fell Double Pica SC', serif;
+    text-align: center;
+    color: black;
+    text-shadow: 2px 2px #fcd084
 }
 
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
+h2 {
+    font-family: 'IM Fell Double Pica', serif;
+}
+
+.special-subheading {
+    background-color: black;
+    color: white;
+}
+
+.center-float {
+    position: center;
+    margin: auto;
+    display: block;
 }
 
 /* QR code generator */

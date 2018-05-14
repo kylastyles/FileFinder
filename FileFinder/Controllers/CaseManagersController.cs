@@ -123,36 +123,30 @@ namespace FileFinder.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Email,PhoneNumber,ProgramID,LastName,FirstName")] CaseManager caseManager)
+        public IActionResult Edit(EditCaseManagerViewModel editCMVM)
         {
-            //TODO: Post with EditCaseManagerViewModel
-            if (id != caseManager.ID)
+            CaseManager CMtoEdit = _context.CaseManagers.Single(cm => cm.ID == editCMVM.ID);
+
+            if (editCMVM.ID != CMtoEdit.ID)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(caseManager);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CaseManagerExists(caseManager.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                CMtoEdit.FirstName = editCMVM.FirstName;
+                CMtoEdit.LastName = editCMVM.LastName;
+                CMtoEdit.PhoneNumber = editCMVM.PhoneNumber;
+                CMtoEdit.Email = editCMVM.Email;
+                CMtoEdit.ProgramID = editCMVM.ProgramID;
+
+                _context.Update(CMtoEdit);
+                _context.SaveChanges();
+            
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Program"] = new SelectList(_context.Programs, "Name", "Name", caseManager.Program.Name);
-            return View(caseManager);
+
+            return View(editCMVM);
         }
 
         // GET: CaseManagers/Delete/5

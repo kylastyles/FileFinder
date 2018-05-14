@@ -14,7 +14,7 @@ namespace FileFinder.ViewModels
 
         public int Quantity { get; set; } = 1;
 
-        public Status? Status { get; set; }
+        public Status Status { get; set; }
 
         public DateTime? ShredDate { get; set; }
 
