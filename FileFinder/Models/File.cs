@@ -90,7 +90,6 @@ namespace FileFinder.Models
             return ID;
         }
 
-
         public string GetStatusIcon()
         {
             return Icons[this.Status];

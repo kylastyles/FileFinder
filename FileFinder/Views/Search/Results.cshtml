@@ -1,7 +1,6 @@
 ﻿@model FileFinder.ViewModels.HomeViewModel
 
-// TODO Show "All Results" when "All" and empty string are passed in.
-@if (Model.UserInput == "" && Model.SelectedColumn == SearchFieldType.All)
+@if (Model.UserInput == null && Model.SelectedColumn == SearchFieldType.All)
 {
     <h2>All Results</h2>
 } else

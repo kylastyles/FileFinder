@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FileFinder.ViewModels
 {
     public class LoginViewModel
     {
-        //username password
 
         [Required]
         [MinLength(6)]
-        [MaxLength(20)]
+        [DataType(DataType.EmailAddress)]
+        [Remote("EmailNotRegistered", "Home", HttpMethod = "POST", ErrorMessage = "Email not found. Please register.")]
         public string Email { get; set; }
 
         [Required]
         [MinLength(8)]
-        [MaxLength(20)]
+        [DataType(DataType.Password)]
+        [Remote("WrongPassword", "Home", HttpMethod = "POST", ErrorMessage = "Incorrect password.")]
         public string Password { get; set; }
 
     }

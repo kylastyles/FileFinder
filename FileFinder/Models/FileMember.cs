@@ -19,6 +19,6 @@ namespace FileFinder.Models
 
         public string Password { get; set; }
 
-        public Role Role { get; set; } = Role.Admin;
+        public Role Role { get; set; } = Role.User;
     }
 }

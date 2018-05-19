@@ -7,7 +7,7 @@ using FileFinder.Data;
 using FileFinder.Models;
 using FileFinder.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using Microsoft.AspNetCore.Http;
 
 namespace FileFinder.Controllers
 {
@@ -20,13 +20,19 @@ namespace FileFinder.Controllers
             _context = context;
         }
 
-        // GET: /<controller>/
-        //public IActionResult Index()
-        //{
-        //    SearchViewModel searchViewModel = new SearchViewModel();
+        //GET: /<controller>/
+        public IActionResult Index()
+        {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
 
-        //    return View(searchViewModel);
-        //}
+            SearchViewModel searchViewModel = new SearchViewModel();
+
+            return View(searchViewModel);
+        }
 
 
         [HttpPost]

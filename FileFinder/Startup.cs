@@ -24,15 +24,29 @@ namespace FileFinder
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=FileFinder;Trusted_Connection=True;ConnectRetryCount=0";
-            services.AddDbContext<FileFinderContext>(options => options.UseSqlServer(connection));
+            services.AddMemoryCache();
 
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.Name = ".RemindMe";
             });
 
+            //services.AddRazorPagesOptions(options =>
+            //{
+            //    options.Conventions.AllowAnonymousToPage("/Home/Login");
+            //    options.Conventions.AllowAnonymousToPage("/Home/Register");
+            //    options.Conventions.AuthorizeFolder("/Buildings");
+            //    options.Conventions.AuthorizeFolder("/CaseManagers");
+            //    options.Conventions.AuthorizeFolder("/Consumers");
+            //    options.Conventions.AuthorizeFolder("/Files");
+            //    options.Conventions.AuthorizeFolder("/Programs");
+            //    options.Conventions.AuthorizeFolder("/Rooms");
+            //    options.Conventions.AuthorizeFolder("/Search");
+            //});
+
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=FileFinder;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<FileFinderContext>(options => options.UseSqlServer(connection));
 
         }
 

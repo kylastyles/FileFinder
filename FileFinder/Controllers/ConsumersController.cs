@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FileFinder.Data;
 using FileFinder.Models;
 using FileFinder.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace FileFinder.Controllers
 {
@@ -23,12 +24,24 @@ namespace FileFinder.Controllers
         // GET: Consumer
         public async Task<IActionResult> Index()
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             return View(await _context.Consumers.OrderBy(c=> c.FullName()).ToListAsync());
         }
 
         // GET: Consumer/Details/5 
         public async Task<IActionResult> Details(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -53,6 +66,12 @@ namespace FileFinder.Controllers
         // GET: Consumer/Create
         public IActionResult Create()
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             CreateConsumerViewModel createConsumerVM = new CreateConsumerViewModel(); 
 
             return View(createConsumerVM);
@@ -83,6 +102,12 @@ namespace FileFinder.Controllers
         // GET: Consumer/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -134,7 +159,7 @@ namespace FileFinder.Controllers
                         consumerToEdit.EndDate = editConsumerVM.EndDate;
                         if(consumerToEdit.Files != null)
                         {
-                            // Change status of files to "InactiveConsumer" and set file ShredDate
+                            // Change status of files to "Inactive" and set file ShredDate
                             foreach (File file in consumerToEdit.Files)
                             {
                                 file.SetShredDate(editConsumerVM);
@@ -185,7 +210,7 @@ namespace FileFinder.Controllers
                 _context.Update(consumerToEdit);
                 await _context.SaveChangesAsync();
 
-                return Redirect("/Consumers/");
+                return Redirect("/Consumers/Index");
             };
 
             return View(editConsumerVM);
@@ -194,6 +219,12 @@ namespace FileFinder.Controllers
         // GET: Consumer/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();

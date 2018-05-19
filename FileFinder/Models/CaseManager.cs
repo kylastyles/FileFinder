@@ -10,15 +10,18 @@ namespace FileFinder.Models
     {
         public int ID { get; set; }
 
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Display(Name ="Phone Number")]
+        [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
         public int ProgramID { get; set; }
         public Program Program { get; set; }
 
-        public ICollection<File> Files { get; set; }
+        //public ICollection<File> Files { get; set; }
+        public List<File> Files { get; set; }
 
     }
 }

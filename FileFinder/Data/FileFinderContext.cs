@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FileFinder.Models;
 using System.Security.Cryptography;
+using System.IO;
+using System.Configuration;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FileFinder.Data
 {
@@ -12,17 +16,20 @@ namespace FileFinder.Data
     {
         public FileFinderContext(DbContextOptions<FileFinderContext> options) : base(options)
         {
-
+            
         }
 
         public DbSet<Consumer> Consumers { get; set; }
         public DbSet<CaseManager> CaseManagers { get; set; }
         public DbSet<Building> Buildings { get; set; }
         public DbSet<Models.Program> Programs { get; set; }
-        public DbSet<File> Files { get; set; }
+        public DbSet<Models.File> Files { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<FileMember> FileMembers { get; set; }
 
+
+
+//SEARCH METHODS
 
         public List<Consumer> SearchConsumers(string value)
         {
@@ -84,13 +91,13 @@ namespace FileFinder.Data
         }
 
         // Before creating a new file, this will check if the same Consumer/CaseManager/Room combo already exists.
-        public bool FileExists(File file)
+        public bool FileExists(Models.File file)
         {
             var results = from f in Files
                           where f.Equals(file)
                           select f;
 
-            if (results == null)
+            if (results.Count() == 0)
             {
                 return false;
             }
@@ -98,18 +105,7 @@ namespace FileFinder.Data
             return true;
         }
 
-        public static string Hash(string stringToHash)
-        {
-            using (var sha1 = new SHA1Managed())
-            {
-                return BitConverter.ToString(sha1.ComputeHash(System.Text.Encoding.UTF8.GetBytes(stringToHash)));
-            }
-        }
-
-        public static string Decode(string stringToDecode)
-        {
-
-        }
-
     }
 }
+
+

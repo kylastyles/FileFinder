@@ -7,9 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FileFinder.Data;
 using FileFinder.Models;
+using Microsoft.AspNetCore.Authorization;
+using FileFinder.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace FileFinder.Controllers
 {
+    //[Authorize]
     public class BuildingsController : Controller
     {
         private readonly FileFinderContext _context;
@@ -19,19 +23,41 @@ namespace FileFinder.Controllers
             _context = context;
         }
 
+        //TODO: Combine Rooms and Buildings Controller/Views into "Location"
+
         // GET: Buildings
         public async Task<IActionResult> Index()
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            //Change View based on Role:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            ViewBag.Role = user.Role;
+
             return View(await _context.Buildings.OrderBy(b => b.Name).Include(b => b.Rooms).ToListAsync());
         }
 
         // GET: Buildings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();
             }
+
+            //Change View based on Role:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            ViewBag.Role = user.Role;
 
             var building = await _context.Buildings
                 .SingleOrDefaultAsync(m => m.ID == id);
@@ -49,28 +75,61 @@ namespace FileFinder.Controllers
         // GET: Buildings/Create
         public IActionResult Create()
         {
-            return View();
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            //Deny non-admins:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            if (user.Role != Role.Admin)
+            {
+                return Redirect("/Buildings/Index");
+            }
+
+            CreateBuildingViewModel createBuildingVM = new CreateBuildingViewModel();
+
+            return View(createBuildingVM);
         }
 
         // POST: Buildings/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Address")] Building building)
+        public async Task<IActionResult> Create(CreateBuildingViewModel createBuildingVM)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(building);
+                Building newBuilding = new Building
+                {
+                    Name = createBuildingVM.Name,
+                    Address = createBuildingVM.Address,
+                    PhoneNumber = createBuildingVM.PhoneNumber
+                };
+
+                _context.Add(newBuilding);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details));
             }
-            return View(building);
+            return View(createBuildingVM);
         }
 
         // GET: Buildings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            //Deny non-admins:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            if (user.Role != Role.Admin)
+            {
+                return Redirect("/Buildings/Index");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -81,47 +140,54 @@ namespace FileFinder.Controllers
             {
                 return NotFound();
             }
-            return View(building);
+
+            EditBuildingViewModel editBuildingVM = new EditBuildingViewModel
+            {
+                Name = building.Name,
+                Address = building.Address,
+                PhoneNumber = building.PhoneNumber,
+            };
+
+            return View(editBuildingVM);
         }
 
         // POST: Buildings/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Address")] Building building)
+        public async Task<IActionResult> Edit(EditBuildingViewModel editBuildingVM)
         {
-            if (id != building.ID)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(building);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BuildingExists(building.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                Building BuildingtoEdit = _context.Buildings.Single(cm => cm.ID == editBuildingVM.ID);
+
+                BuildingtoEdit.Name = editBuildingVM.Name;
+                BuildingtoEdit.Address = editBuildingVM.Address;
+                BuildingtoEdit.PhoneNumber = editBuildingVM.PhoneNumber;
+
+                _context.Update(BuildingtoEdit);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(building);
+            return View(editBuildingVM);
         }
 
         // GET: Buildings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            //Deny non-admins:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            if (user.Role != Role.Admin)
+            {
+                return Redirect("/Buildings/Index");
+            }
+
             if (id == null)
             {
                 return NotFound();

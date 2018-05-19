@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FileFinder.Data;
 using FileFinder.Models;
 using FileFinder.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace FileFinder.Controllers
 {
@@ -23,13 +24,37 @@ namespace FileFinder.Controllers
         // GET: Files
         public async Task<IActionResult> Index()
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             var fileFinderContext = _context.Files.Include(f => f.CaseManager).Include(f => f.Consumer).Include(f => f.Room);
+
+            //Update files that need to be shredded
+            foreach(File f in fileFinderContext)
+            {
+                if (f.ShredDate <= DateTime.Now)
+                {
+                    f.Status = Status.Shred;
+                    _context.Update(f);
+                }
+            }
+            _context.SaveChanges();
+
             return View(await fileFinderContext.OrderBy(f => f.Consumer.LastName).ThenBy(f => f.Consumer.FirstName).ToListAsync());
         }
 
         // GET: Files/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -51,6 +76,12 @@ namespace FileFinder.Controllers
         // GET: Files/Create
         public IActionResult Create(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             // Make ViewModel
             CreateFileViewModel createFileVM = new CreateFileViewModel
             {
@@ -83,14 +114,12 @@ namespace FileFinder.Controllers
                     Quantity = createFilevm.Quantity
                 };
 
-                if(_context.FileExists(newFile))
+                //if file already exists, ask if user would like to update quantity
+                if (_context.FileExists(newFile))
                 {
-                    // TODO: Make a modal pop-up that confirms user wants to add quantity to existing file
                     File oldFile = _context.Files.First(f => f.CaseManagerID == newFile.CaseManagerID && f.ConsumerID == newFile.ConsumerID && f.RoomID == newFile.RoomID);
-                    oldFile.Quantity += newFile.Quantity;
-                    _context.Update(oldFile);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+
+                    return Redirect(String.Format("AddConfirm?id={0}&userNum={1}", oldFile.ID, newFile.Quantity));
                 };
 
                 _context.Add(newFile);
@@ -101,9 +130,44 @@ namespace FileFinder.Controllers
             return View(createFilevm);
         }
 
+        public IActionResult AddConfirm(int? id, int? userNum)
+        {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            File oldFile = _context.Files.Single(f => f.ID == id);
+            oldFile.Quantity += userNum ?? default(int);
+
+            return View(oldFile);
+        }
+
+        [HttpPost]
+        public IActionResult AddConfirm(File oldFile)
+        {
+            _context.Update(oldFile);
+            _context.SaveChangesAsync();
+
+            return Redirect(String.Format("Details?id={0}", oldFile.ID));
+        }
+
+
         // GET: Files/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -168,6 +232,12 @@ namespace FileFinder.Controllers
         // GET: Files/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();

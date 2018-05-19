@@ -33,6 +33,10 @@
     }
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    @if (ViewBag.Role == FileFinder.Models.Role.Admin)
+    {
+        <a asp-controller="Rooms" asp-action="Index">Add Rooms</a>
+        <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a>
+    }
     <a asp-action="Index">Back to Building List</a>
 </div>

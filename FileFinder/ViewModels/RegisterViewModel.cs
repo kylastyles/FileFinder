@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FileFinder.Models;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FileFinder.ViewModels
 {
@@ -16,26 +17,21 @@ namespace FileFinder.ViewModels
         [Required]
         [MinLength(6)]
         [MaxLength(20)]
+        [DataType(DataType.EmailAddress)]
+        [Remote("DoesEmailExist", "Home", HttpMethod = "POST", ErrorMessage ="Email already registered. Please enter a different email.")]
         public string Email { get; set; }
 
         [Required]
         [MinLength(8)]
-        [MaxLength(20)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Required]
         [MinLength(8)]
-        [MaxLength(20)]
+        [DataType(DataType.Password)]
         [Display(Name ="Verify Password")]
+        [Compare("Password", ErrorMessage = "Both passwords must match.")]
         public string Verify { get; set; }
 
-        [Display(Name = "Role")]
-        public List<Role> GetRoles { get; set; } =  new List<Role>
-        {
-            Role.Admin,
-            Role.User
-        };
-
-        public Role Role { get; set; }
     }
 }

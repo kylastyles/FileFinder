@@ -8,9 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using FileFinder.Data;
 using FileFinder.Models;
 using FileFinder.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace FileFinder.Controllers
 {
+    //InvalidOperationException: No authenticationScheme was specified, and there was no DefaultChallengeScheme found.
+    //Microsoft.AspNetCore.Authentication.AuthenticationService+<ChallengeAsync>d__11.MoveNext()
+
+    //[Authorize]
     public class RoomsController : Controller
     {
         private readonly FileFinderContext _context;
@@ -23,6 +29,16 @@ namespace FileFinder.Controllers
         // GET: Rooms
         public async Task<IActionResult> Index()
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            //Change View based on Role:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            ViewBag.Role = user.Role;
+
             var fileFinderContext = _context.Rooms.Include(r => r.Building).OrderBy(r => r.Name).ToListAsync();
 
             return View(await fileFinderContext);
@@ -31,10 +47,20 @@ namespace FileFinder.Controllers
         // GET: Rooms/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();
             }
+
+            //Change View based on Role:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            ViewBag.Role = user.Role;
 
             var room = await _context.Rooms
                 .Include(r => r.Building)
@@ -45,7 +71,6 @@ namespace FileFinder.Controllers
                         .Include(f => f.Consumer)
                         .Include(f => f.CaseManager)
                         .ToList();
-
 
             if (room == null)
             {
@@ -58,6 +83,19 @@ namespace FileFinder.Controllers
         // GET: Rooms/Create
         public IActionResult Create()
         {
+            //Deny non-users:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            //Deny non-admins:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            if (user.Role != Role.Admin)
+            {
+                return Redirect("/Buildings/Index");
+            }
+
             //ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID");
 
             CreateRoomViewModel createRoomVM = new CreateRoomViewModel();
@@ -86,6 +124,19 @@ namespace FileFinder.Controllers
         // GET: Rooms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            //Deny non-admins:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            if (user.Role != Role.Admin)
+            {
+                return Redirect("/Buildings/Index");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -139,6 +190,19 @@ namespace FileFinder.Controllers
         // GET: Rooms/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
+            //Deny non-admins:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            if (user.Role != Role.Admin)
+            {
+                return Redirect("/Buildings/Index");
+            }
+
             if (id == null)
             {
                 return NotFound();

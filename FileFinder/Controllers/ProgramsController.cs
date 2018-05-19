@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FileFinder.Data;
 using FileFinder.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace FileFinder.Controllers
 {
@@ -22,12 +23,24 @@ namespace FileFinder.Controllers
         // GET: Programs
         public async Task<IActionResult> Index()
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             return View(await _context.Programs.OrderBy(p => p.Name).ToListAsync());
         }
 
         // GET: Programs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -37,7 +50,6 @@ namespace FileFinder.Controllers
                 .SingleOrDefaultAsync(m => m.ID == id);
 
             Program.CaseManagers = _context.CaseManagers.Where(cm => cm.ProgramID == Program.ID).OrderBy(cm => cm.FullName()).ToList();
-
 
             if (Program == null)
             {
@@ -50,6 +62,12 @@ namespace FileFinder.Controllers
         // GET: CPrograms/Create
         public IActionResult Create()
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             return View();
         }
 
@@ -72,6 +90,12 @@ namespace FileFinder.Controllers
         // GET: CPrograms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -123,6 +147,12 @@ namespace FileFinder.Controllers
         // GET: Programs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("/Home/Login");
+            }
+
             if (id == null)
             {
                 return NotFound();

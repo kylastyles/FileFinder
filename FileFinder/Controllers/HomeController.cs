@@ -13,7 +13,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Session;
 using System.Security.Authentication;
 using System.Web;
-
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace FileFinder.Controllers
 {
@@ -21,7 +22,7 @@ namespace FileFinder.Controllers
     {
         const string SessionName = "_Name";
 
-        private readonly FileFinderContext _context;
+        private FileFinderContext _context;
 
         public HomeController(FileFinderContext context)
         {
@@ -31,6 +32,12 @@ namespace FileFinder.Controllers
 
         public IActionResult Index()
         {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("Login");
+            }
+
             // For Search:
             HomeViewModel homeViewModel = new HomeViewModel();
 
@@ -57,7 +64,7 @@ namespace FileFinder.Controllers
             return View(homeViewModel);
         }
 
-
+        [AllowAnonymous]
         public IActionResult Login()
         {
             LoginViewModel loginVM = new LoginViewModel();
@@ -65,6 +72,7 @@ namespace FileFinder.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Login(LoginViewModel loginVM)
@@ -72,39 +80,37 @@ namespace FileFinder.Controllers
             if (ModelState.IsValid)
             {
                 //Find user
-                //System.InvalidOperationException: 'Sequence contains no elements'
-
-                try
+                if (_context.FileMembers.Any(x => x.Email == loginVM.Email))
                 {
                     FileMember user = _context.FileMembers.Single(u => u.Email == loginVM.Email);
 
-                    if (user.Password == loginVM.Password)
+                    if (user.Password.Equals(Encryption.Hash(loginVM.Password)))
                     {
                         //start session
                         HttpContext.Session.Set(SessionName, System.Text.Encoding.UTF8.GetBytes(user.Email));
-                        string SessionNum = HttpContext.Session.GetHashCode().ToString();
-                        HttpContext.Response.Cookies.Append(SessionNum, user.Email.ToString());
-                        
-                        RedirectToAction(nameof(Index));
+                        //string SessionNum = HttpContext.Session.GetHashCode().ToString();
+                        //HttpContext.Response.Cookies.Append(SessionNum, user.Email.ToString());
+
+                        HttpContext.Session.SetString("Username", user.Email);
+
+
+
+                        return RedirectToAction(nameof(Index));
                     }
-                }
-                catch (InvalidOperationException)
-                {
-                    ViewBag.Error = "User not found. Please register.";
+                    ViewBag.Error = "Incorrect Password.";
                     return View(loginVM);
                 }
-
+                ViewBag.Error = "User does not exist. Please register.";
+                return View(loginVM);
             }
-
-            //Login failed, return to login screen
-            ViewBag.Error = "Login Failed. Tray Again.";
+            ViewBag.Error = "Login failed. Please try again.";
             return View(loginVM);
         }
 
         public IActionResult Logout(int? id)
         {
-            //TODO: Remove Cookie from Session
-
+            HttpContext.Session.Clear();
+            HttpContext.Response.Cookies.Delete(SessionName);
             return View();
         }
 
@@ -123,9 +129,10 @@ namespace FileFinder.Controllers
             _context.Files.Update(file);
             await _context.SaveChangesAsync();
 
-            return Redirect("/");
+            return Redirect("/Home/Index");
         }
 
+        [AllowAnonymous]
         public IActionResult Register()
         {
             RegisterViewModel registerVM = new RegisterViewModel();
@@ -133,6 +140,8 @@ namespace FileFinder.Controllers
             return View(registerVM);
         }
 
+
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Register(RegisterViewModel registerVM)
@@ -140,44 +149,59 @@ namespace FileFinder.Controllers
             if(ModelState.IsValid)
             {
                 //if user does not already exist:
-                //if(_context.FileMembers.Where(u => u.Email == registerVM.Email) == null)
-                //{
+                if (!_context.FileMembers.Any(u => u.Email == registerVM.Email))
+                {
                     //if passwords match:
-                    if(registerVM.Password.Equals(registerVM.Verify))
+                    if (registerVM.Password.Equals(registerVM.Verify))
                     {
-                        //make new model with VM data, hashing data
+                        //make new model with VM data, hashing password
                         FileMember newUser = new FileMember
                         {
                             FirstName = registerVM.FirstName,
                             LastName = registerVM.LastName,
                             Email = registerVM.Email,
-                            Password = registerVM.Password
+                            Password = Encryption.Hash(registerVM.Password)
                         };
-
+                        
                         //save model to DB
                         _context.FileMembers.Add(newUser);
-                        _context.SaveChangesAsync();
+                        _context.SaveChanges();
 
                         //start session
                         HttpContext.Session.Set(SessionName, System.Text.Encoding.UTF8.GetBytes(newUser.Email));
-                        String CookieName = registerVM.Email;
-                        HttpContext.Response.Cookies.Append(CookieName, registerVM.Email);
+                        string SessionNum = HttpContext.Session.GetHashCode().ToString();
+                        HttpContext.Response.Cookies.Append(SessionNum, newUser.Email.ToString());
 
-                    return RedirectToAction(nameof(Index));
+                        return RedirectToAction(nameof(Index));
                     }
 
                     ViewBag.Error = "Passwords must match.";
                     return View(registerVM);
-                //}
+                }
 
-                //ViewBag.Error = "User already exists. Please login.";
-                //return View(registerVM);
+                ViewBag.Error = "User already exists. Please login.";
+                return View(registerVM);
             }
 
             ViewBag.Error = "Register failed. Please try again.";
             return View(registerVM);
         }
 
+// JSON Checks
+        public JsonResult DoesEmailExist(string email)
+        {
+            return Json(!_context.FileMembers.Any(x => x.Email == email));
+        }
+
+        public JsonResult EmailNotRegistered(string email)
+        {
+            return Json(_context.FileMembers.Any(x => x.Email == email));
+        }
+
+        public JsonResult WrongPassword(string password)
+        {
+            return Json(!_context.FileMembers.Any(x => x.Password == password));
+        }
 
         // <----------- PARTIAL VIEW EXPERIMENTS -------------->
 

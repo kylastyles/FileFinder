@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    @if (Model.ActionFiles != null)
+    @if (Model.ActionFiles.Count() > 0)
     {
         <div class="row">
             <div class="col special-subheading">
@@ -56,19 +56,19 @@
         {
             <div class="row"> 
                 <div class="col-sm-2">
-                    <img src="@file.GetStatusIcon()" />
+                    <a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID" title="Go to file details."><img src="~/@file.GetStatusIcon()" /></a>
                 </div>
                 <div class="col-sm-6">
                     @Html.Partial("_File", file)
                 </div>
                 <div class="col-sm-4 text-center">
-                    <a asp-action="FileRefresh" asp-route-id="@file.ID">Refreshed!</a>
+                    <a asp-action="FileRefresh" asp-route-id="@file.ID" title="Click here to change file status to OK &#13;&#10;and update file quantity by one."><img src="~/images/FilePNGs/clr-new.png" />Refreshed!</a>
                 </div>
             </div>
         }
     }
 
-    @if (Model.InactiveFiles != null)
+    @if (Model.InactiveFiles.Count() > 0)
     {
         <div class="row">
             <div class="col special-subheading">
@@ -80,13 +80,13 @@
         {
             <div class="row">
                 <div class="col-sm-2">
-                    <img src="@file.GetStatusIcon()" />
+                    <a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID"><img src="~/@file.GetStatusIcon()" /></a>
                 </div>
                 <div class="col-sm-6">
                     @Html.Partial("_File", file)
                 </div>
                 <div class="col-sm-4 text-center">
-                    <a asp-controller="Files" asp-action="Delete" asp-route-id="@file.ID">Delete</a>
+                    <a asp-controller="Files" asp-action="Delete" asp-route-id="@file.ID" title="Click here to delete entry from database."><img src="~/images/FilePNGs/blk-delete.png" />Delete</a>
                 </div>
             </div>
         }

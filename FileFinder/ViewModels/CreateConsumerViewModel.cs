@@ -23,6 +23,7 @@ namespace FileFinder.ViewModels
         [Required]
         [Display(Name = "Date of Birth")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        [DataType(DataType.Date)]
         public DateTime DOB { get; set; }
 
     }

@@ -6,54 +6,32 @@
 
 <h2>File Details</h2>
 
-<div>
     <h4>File</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CaseManager)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CaseManager.LastName), @Html.DisplayFor(model => model.CaseManager.FirstName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Consumer)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Consumer.LastName), @Html.DisplayFor(model => model.Consumer.FirstName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Room)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Room.ID)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        @if (Model.Status == FileFinder.Models.Status.InactiveConsumer)
-         {
-            <dt>
-                @Html.DisplayNameFor(model => model.ShredDate)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.ShredDate)
-            </dd>
 
-         }
+    <div class="row">
+        <div class="col-sm-2">
+            <a asp-controller="Files" asp-action="Details" asp-route-id="@Model.ID"><img src="~/@Model.GetStatusIcon()" /></a>
+        </div>
+        <div class="col-sm-6">
+            @Html.Partial("_File", Model)
+        </div>
+        @if (Model.Status == Status.Full || Model.Status == Status.Damaged)
+        {
+            <div class="col-sm-4 text-center">
+                <a asp-controller="Home" asp-action="FileRefresh" asp-route-id="@Model.ID" title="Click here to change file status to OK &#13;&#10;and update quantity by one."><img src="~/images/FilePNGs/clr-new.png" />Refreshed!</a>
+            </div>
+        }
 
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to File List</a>
-</div>
+        @if (Model.Status == Status.Shred)
+        {
+            <div class="col-sm-4 text-center">
+                <a asp-controller="Files" asp-action="Delete" asp-route-id="@Model.ID" title="Click here to delete entry from database."><img src="~/images/FilePNGs/blk-delete.png" />Delete</a>
+            </div>
+        }
+    </div>
+
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+        <a asp-action="Index">Back to File List</a>
+    </div>

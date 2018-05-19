@@ -36,7 +36,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                <img src="@item.GetStatusIcon()" />
+                <a asp-controller="Files" asp-action="Details" asp-route-id="@item.ID" title="Go to file details."><img src="~/@item.GetStatusIcon()" /></a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
