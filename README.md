@@ -1,5 +1,5 @@
 # FileFinder
-Placeholder for LaunchCode's LC101 capstone project.
+LaunchCode's LC101/Liftoff capstone project.
 
 Ten years before the Federal Mandate for Electronic Medical Records of 2014, Kyla was a file clerk at a human services organization. The organization provided day programs and residential assistance to consumers with varying degrees of disabilities. Case managers and therapists for the consumers created ample paperwork which Kyla was responsible for sorting into files. Kyla also performed quarterly audits of the files, and confidentially shredded the old files belonging to consumers who were no longer active in the system.
 
