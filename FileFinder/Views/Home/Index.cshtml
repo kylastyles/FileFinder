@@ -55,7 +55,7 @@
         @foreach (var file in Model.ActionFiles)
         {
             <div class="row"> 
-                <div class="col-sm-2">
+                <div class="col-sm-2 text-center">
                     <a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID" title="Go to file details."><img src="~/@file.GetStatusIcon()" /></a>
                 </div>
                 <div class="col-sm-6">
@@ -79,8 +79,8 @@
         @foreach (var file in Model.InactiveFiles)
         {
             <div class="row">
-                <div class="col-sm-2">
-                    <a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID"><img src="~/@file.GetStatusIcon()" /></a>
+                <div class="col-sm-2 text-center">
+                    <a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID" title="Go to file details."><img src="~/@file.GetStatusIcon()" /></a>
                 </div>
                 <div class="col-sm-6">
                     @Html.Partial("_File", file)

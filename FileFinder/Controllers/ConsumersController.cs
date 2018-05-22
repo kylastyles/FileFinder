@@ -56,9 +56,9 @@ namespace FileFinder.Controllers
 
             // Add files to consumer
             consumer.Files = _context.Files.Where(f => f.ConsumerID == consumer.ID)
-                        .Include(f => f.CaseManager)
-                        .Include(f => f.Room)
-                        .ToList();
+                                           .Include(f => f.CaseManager)
+                                           .Include(f => f.Room)
+                                           .ToList();
 
             return View(consumer);
         }

@@ -30,7 +30,13 @@ namespace FileFinder.Controllers
                 return Redirect("/Home/Login");
             }
 
-            var fileFinderContext = _context.Files.Include(f => f.CaseManager).Include(f => f.Consumer).Include(f => f.Room);
+            var fileFinderContext = _context.Files.Include(f => f.CaseManager)
+                                                  .Include(f => f.Consumer)
+                                                  .Include(f => f.Room)
+                                                  .OrderBy(f => f.Room.Name)
+                                                  .ThenBy(f => f.CaseManager.LastName)
+                                                  .ThenBy(f => f.Consumer.LastName)
+                                                  .ThenBy(f => f.Consumer.FirstName);
 
             //Update files that need to be shredded
             foreach(File f in fileFinderContext)
@@ -43,7 +49,7 @@ namespace FileFinder.Controllers
             }
             _context.SaveChanges();
 
-            return View(await fileFinderContext.OrderBy(f => f.Consumer.LastName).ThenBy(f => f.Consumer.FirstName).ToListAsync());
+            return View(await fileFinderContext.ToListAsync());
         }
 
         // GET: Files/Details/5

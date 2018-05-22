@@ -14,8 +14,8 @@ namespace FileFinder.Models
 
         public string Name { get; set; }
 
+        [Display(Name="Case Managers")]
         public ICollection<CaseManager> CaseManagers { get; set; }
-
 
         public override string ToString()
         {

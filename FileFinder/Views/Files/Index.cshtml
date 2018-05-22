@@ -18,10 +18,10 @@
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CaseManager)
+                @Html.DisplayNameFor(model => model.Consumer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Consumer)
+                @Html.DisplayNameFor(model => model.CaseManager)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
@@ -42,13 +42,13 @@
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                <a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@item.CaseManagerID">
-                    @Html.DisplayFor(modelItem => item.CaseManager.LastName), @Html.DisplayFor(modelItem => item.CaseManager.FirstName)
+                <a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@item.ConsumerID">
+                    @Html.DisplayFor(modelItem => item.Consumer.LastName), @Html.DisplayFor(modelItem => item.Consumer.FirstName)
                 </a>
             </td>
             <td>
-                <a asp-controller="Consumers" asp-action="Details" asp-route-id="@item.ConsumerID">
-                    @Html.DisplayFor(modelItem => item.Consumer.LastName), @Html.DisplayFor(modelItem => item.Consumer.FirstName)
+                <a asp-controller="Consumers" asp-action="Details" asp-route-id="@item.CaseManagerID">
+                    @Html.DisplayFor(modelItem => item.CaseManager.LastName), @Html.DisplayFor(modelItem => item.CaseManager.FirstName)
                 </a>
             </td>
             <td>

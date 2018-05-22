@@ -46,13 +46,15 @@ namespace FileFinder.Controllers
                                         .Where(f => f.Status == Status.Damaged || f.Status == Status.Full)
                                         .Include(f => f.Consumer)
                                         .Include(f => f.CaseManager)
-                                        .Include(f => f.Room);
+                                        .Include(f => f.Room)
+                                        .OrderBy(f => f.Consumer.LastName);
 
             homeViewModel.InactiveFiles = _context.Files
                                         .Where(f => f.ShredDate <= homeViewModel.Today)
                                         .Include(f => f.Consumer)
                                         .Include(f => f.CaseManager)
-                                        .Include(f => f.Room);
+                                        .Include(f => f.Room)
+                                        .OrderBy(f => f.Consumer.LastName);
 
             foreach (File file in homeViewModel.InactiveFiles)
             {
@@ -92,7 +94,6 @@ namespace FileFinder.Controllers
                         //HttpContext.Response.Cookies.Append(SessionNum, user.Email.ToString());
 
                         HttpContext.Session.SetString("Username", user.Email);
-
 
 
                         return RedirectToAction(nameof(Index));

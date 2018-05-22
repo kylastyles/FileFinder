@@ -1,0 +1,28 @@
+﻿@model FileFinder.ViewModels.AuditViewModel
+
+<h2>Audit</h2>
+
+<p>
+    Please enter the current year and click the button to separate all files into four distinct audit groups.
+</p>
+
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="AuditSort" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="FiscalYear" class="control-label"></label>
+                    <input asp-for="FiscalYear" class="form-control" />
+                    <span asp-validation-for="FiscalYear" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Sort Files" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+

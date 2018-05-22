@@ -17,18 +17,4 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\images\FilePNGs\blk-damaged.png" />
-    <None Include="wwwroot\images\FilePNGs\blk-full.png" />
-    <None Include="wwwroot\images\FilePNGs\blk-new.png" />
-    <None Include="wwwroot\images\FilePNGs\blk-normal.png" />
-    <None Include="wwwroot\images\FilePNGs\blk-shred.png" />
-    <None Include="wwwroot\images\FilePNGs\clr-damaged.png" />
-    <None Include="wwwroot\images\FilePNGs\clr-full.png" />
-    <None Include="wwwroot\images\FilePNGs\clr-new.png" />
-    <None Include="wwwroot\images\FilePNGs\clr-normal.png" />
-    <None Include="wwwroot\images\FilePNGs\clr-shred.png" />
-    <None Include="wwwroot\images\FilePNGs\_DS_Store" />
-  </ItemGroup>
-
 </Project>
