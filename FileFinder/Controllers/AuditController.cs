@@ -49,7 +49,9 @@ namespace FileFinder.Controllers
                 FiscalYear = auditViewModel.FiscalYear,
             };
 
-            IEnumerable<File> allFiles = _context.Files.Where(f => f.Status != Status.Inactive).Include(f => f.Consumer).Include(f => f.Room).OrderBy(f => f.Room.Name).ThenBy(f => f.Consumer.FullName());
+            IEnumerable<File> allFiles = _context.Files.Where(f => f.Status != Status.Inactive)
+                .Include(f => f.Consumer).Include(f => f.Room).OrderBy(f => f.Room.Name)
+                .ThenBy(f => f.Consumer.LastName).ThenBy(f => f.Consumer.FirstName);
 
             List<List<File>> lists = audit.SortFiles(allFiles);
 

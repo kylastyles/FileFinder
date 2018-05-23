@@ -10,6 +10,12 @@
     padding-right: 15px;
 }
 
+nav {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: antiquewhite;
+}
+
+
 .jumbotron {
     background-image: url("../images/binder.jpg");
     background-size: cover;
