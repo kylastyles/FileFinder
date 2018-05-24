@@ -38,6 +38,10 @@ namespace FileFinder.Controllers
                 return Redirect("Login");
             }
 
+            //Change View based on Role:
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            ViewBag.Role = user.Role;
+
             // For Search:
             HomeViewModel homeViewModel = new HomeViewModel();
 
@@ -186,6 +190,34 @@ namespace FileFinder.Controllers
 
             ViewBag.Error = "Register failed. Please try again.";
             return View(registerVM);
+        }
+
+        public IActionResult Users()
+        {
+            //Check if user logged in:
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return Redirect("Login");
+            }
+
+            FileMember user = _context.FileMembers.Single(u => u.Email == HttpContext.Session.GetString("Username"));
+            if(user.Role != Role.Admin)
+            {
+                return Redirect("Index");
+            }
+
+            IEnumerable<FileMember> fileMembers = _context.FileMembers.AsEnumerable();
+
+            return View(fileMembers);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var user = _context.FileMembers.SingleOrDefault(m => m.ID == id);
+            _context.FileMembers.Remove(user);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
 // JSON Checks

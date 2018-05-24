@@ -24,13 +24,15 @@
         <th>@Html.DisplayNameFor(model => model.CaseManagers)</th>
         </tr>
         <tr>
-            @foreach (CaseManager cm in Model.CaseManagers)
-            {
             <td>
-                <a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@cm.ID">@cm.FullName()</a>
+                <ul>
+                    @foreach (CaseManager cm in Model.CaseManagers)
+                     {
+                        <li><a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@cm.ID">@cm.FullName()</a></li>
+                     }
+                </ul>
             </td>
-            }
-        </tr>
+                </tr>
 
     </table>
 </div>

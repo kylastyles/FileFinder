@@ -6,7 +6,17 @@
 
 <div class="jumbotron"><h1>FileFinder</h1></div>
 
-                                                <!--  Search Feature  -->
+
+<!--   Admin Panel   -->
+@if (ViewBag.Role == FileFinder.Models.Role.Admin)
+{
+    <h2>Admin</h2>
+    <div><a asp-controller="Home" asp-action="Register">Register New User</a> | <a asp-controller="Home" asp-action="Users">See All Users</a></div>
+}
+
+<hr />
+
+<!--  Search Feature  -->
 <h2>Search</h2>
 <br />
 
@@ -15,15 +25,15 @@
 <form asp-controller="Search" asp-action="Results" method="post">
     <p>
         @foreach (var column in Model.Columns)
-            {
+        {
 
-                var checkedColumn = column.Equals(Model.SelectedColumn);
+            var checkedColumn = column.Equals(Model.SelectedColumn);
 
-                <span>
-                    <input type="radio" name="SelectedColumn" id="@column" value="@column" checked="@checkedColumn" />
-                    <label for="@column">@column</label>
-                </span>
-            }
+            <span>
+                <input type="radio" name="SelectedColumn" id="@column" value="@column" checked="@checkedColumn" />
+                <label for="@column">@column</label>
+            </span>
+        }
     </p>
 
     <p>
@@ -36,63 +46,62 @@
 
 <hr />
 
-                                                <!--  Daily Tasks Feature  -->
+<!--  Daily Tasks Feature  -->
 
+<div class="row">
+    <div class="col text-center">
+        <h2>Daily Tasks - @Model.Today.DayOfWeek, @Model.Today.ToShortDateString() </h2>
+    </div>
+</div>
+
+@if (Model.ActionFiles.Count() > 0)
+{
     <div class="row">
-        <div class="col text-center">
-            <h2>Daily Tasks - @Model.Today.DayOfWeek, @Model.Today.ToShortDateString() </h2>
+        <div class="col special-subheading">
+            <h4>Files to Refresh</h4>
         </div>
     </div>
 
-    @if (Model.ActionFiles.Count() > 0)
+    @foreach (var file in Model.ActionFiles)
     {
         <div class="row">
-            <div class="col special-subheading">
-                <h4>Files to Refresh</h4>
+            <div class="col-sm-2 text-center">
+                <a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID" title="Go to file details."><img src="~/@file.GetStatusIcon()" /></a>
+            </div>
+            <div class="col-sm-6">
+                @Html.Partial("_File", file)
+            </div>
+            <div class="col-sm-4 text-center">
+                <a asp-action="FileRefresh" asp-route-id="@file.ID" title="Click here to change file status to OK &#13;&#10;and update file quantity by one."><img src="~/images/FilePNGs/clr-new.png" />Refreshed!</a>
             </div>
         </div>
-
-        @foreach (var file in Model.ActionFiles)
-        {
-            <div class="row"> 
-                <div class="col-sm-2 text-center">
-                    <a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID" title="Go to file details."><img src="~/@file.GetStatusIcon()" /></a>
-                </div>
-                <div class="col-sm-6">
-                    @Html.Partial("_File", file)
-                </div>
-                <div class="col-sm-4 text-center">
-                    <a asp-action="FileRefresh" asp-route-id="@file.ID" title="Click here to change file status to OK &#13;&#10;and update file quantity by one."><img src="~/images/FilePNGs/clr-new.png" />Refreshed!</a>
-                </div>
-            </div>
-        }
     }
+}
 
-    @if (Model.InactiveFiles.Count() > 0)
+@if (Model.InactiveFiles.Count() > 0)
+{
+    <div class="row">
+        <div class="col special-subheading">
+            <h4>Files to Shred</h4>
+        </div>
+    </div>
+
+    @foreach (var file in Model.InactiveFiles)
     {
         <div class="row">
-            <div class="col special-subheading">
-                <h4>Files to Shred</h4>
+            <div class="col-sm-2 text-center">
+                <a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID" title="Go to file details."><img src="~/@file.GetStatusIcon()" /></a>
+            </div>
+            <div class="col-sm-6">
+                @Html.Partial("_File", file)
+            </div>
+            <div class="col-sm-4 text-center">
+                <a asp-controller="Files" asp-action="Delete" asp-route-id="@file.ID" title="Click here to delete entry from database."><img src="~/images/FilePNGs/blk-delete.png" />Delete</a>
             </div>
         </div>
-
-        @foreach (var file in Model.InactiveFiles)
-        {
-            <div class="row">
-                <div class="col-sm-2 text-center">
-                    <a asp-controller="Files" asp-action="Details" asp-route-id="@file.ID" title="Go to file details."><img src="~/@file.GetStatusIcon()" /></a>
-                </div>
-                <div class="col-sm-6">
-                    @Html.Partial("_File", file)
-                </div>
-                <div class="col-sm-4 text-center">
-                    <a asp-controller="Files" asp-action="Delete" asp-route-id="@file.ID" title="Click here to delete entry from database."><img src="~/images/FilePNGs/blk-delete.png" />Delete</a>
-                </div>
-            </div>
-        }
-
     }
 
+}
 
 
 @*@{ Html.RenderPartial("_DailyTasks"); }*@
