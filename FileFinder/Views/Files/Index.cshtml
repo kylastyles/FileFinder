@@ -42,12 +42,12 @@
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                <a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@item.ConsumerID">
+                <a asp-controller="Consumers" asp-action="Details" asp-route-id="@item.ConsumerID">
                     @Html.DisplayFor(modelItem => item.Consumer.LastName), @Html.DisplayFor(modelItem => item.Consumer.FirstName)
                 </a>
             </td>
             <td>
-                <a asp-controller="Consumers" asp-action="Details" asp-route-id="@item.CaseManagerID">
+                <a asp-controller="CaseManagers" asp-action="Details" asp-route-id="@item.CaseManagerID">
                     @Html.DisplayFor(modelItem => item.CaseManager.LastName), @Html.DisplayFor(modelItem => item.CaseManager.FirstName)
                 </a>
             </td>

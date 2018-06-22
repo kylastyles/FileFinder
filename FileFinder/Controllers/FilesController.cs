@@ -226,6 +226,7 @@ namespace FileFinder.Controllers
                 fileToEdit.RoomID = editFileViewModel.RoomID;
                 fileToEdit.Status = editFileViewModel.Status;
 
+
                 _context.Update(fileToEdit);
                 await _context.SaveChangesAsync();
 

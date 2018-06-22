@@ -4,14 +4,16 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="jumbotron"><h1>FileFinder</h1></div>
+@*<div><img src="~/images/filefinderlogo.png" /></div>*@
 
 
 <!--   Admin Panel   -->
 @if (ViewBag.Role == FileFinder.Models.Role.Admin)
 {
+    <div class="admin">
     <h2>Admin</h2>
     <div><a asp-controller="Home" asp-action="Register">Register New User</a> | <a asp-controller="Home" asp-action="Users">See All Users</a></div>
+    </div>
 }
 
 <hr />

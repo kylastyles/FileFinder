@@ -23,7 +23,6 @@ namespace FileFinder.Controllers
             _context = context;
         }
 
-        //TODO: Combine Rooms and Buildings Controller/Views into "Location"
 
         // GET: Buildings
         public async Task<IActionResult> Index()

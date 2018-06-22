@@ -157,7 +157,7 @@ namespace FileFinder.Controllers
                     {
                         consumerToEdit.Active = false;
                         consumerToEdit.EndDate = editConsumerVM.EndDate;
-                        if(consumerToEdit.Files != null)
+                        if(consumerToEdit.Files.Count != 0)
                         {
                             // Change status of files to "Inactive" and set file ShredDate
                             foreach (File file in consumerToEdit.Files)

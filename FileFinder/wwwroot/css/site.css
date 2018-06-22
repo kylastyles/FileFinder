@@ -16,7 +16,7 @@ nav {
 }
 
 
-.jumbotron {
+/*.jumbotron {
     background-image: url("../images/binder.jpg");
     background-size: cover;
     background-position: center center;
@@ -24,7 +24,7 @@ nav {
     text-align: center;
     color: black;
     text-shadow: 2px 2px #fcd084
-}
+}*/
 
 h2, h4 {
     font-family: 'IM Fell Double Pica', serif;
@@ -39,6 +39,17 @@ h2, h4 {
     position: center;
     margin: auto;
     display: block;
+}
+
+/*.img-fluid {
+    max-width: 100%;
+    height: auto;
+}*/
+
+.admin {
+    background-color: lightgray;
+    padding: 2px 15px 15px 15px; 
+    border-radius: 5px;
 }
 
 /* QR code generator */

@@ -8,10 +8,12 @@
 
 @if (ViewBag.Role == FileFinder.Models.Role.Admin)
 {
-    <p>
-        <a asp-action="Create">Create New Building</a> |
-        <a asp-controller="Rooms" asp-action="Create">Create New Room</a>
-    </p>
+    <div class="admin">
+        <p>
+            <a asp-action="Create">Create New Building</a> |
+            <a asp-controller="Rooms" asp-action="Create">Create New Room</a>
+        </p>
+    </div>
 }
 
 <table class="table">
