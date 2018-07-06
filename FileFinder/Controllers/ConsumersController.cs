@@ -173,12 +173,13 @@ namespace FileFinder.Controllers
                     {
                         consumerToEdit.Active = true;
                         consumerToEdit.EndDate = null;
-                        if (consumerToEdit.Files != null)
+                        editConsumerVM.EndDate = null;
+                        if (consumerToEdit.Files.Count > 0)
                         {
                             foreach (File file in consumerToEdit.Files)
                             {
                                 file.Status = Status.OK;
-                                file.SetShredDate(null);
+                                file.SetShredDate(editConsumerVM);
                                 _context.Update(file);
                             }
                         }
@@ -196,7 +197,7 @@ namespace FileFinder.Controllers
                     {
                         consumerToEdit.EndDate = editConsumerVM.EndDate;
                     }
-                    // Update their files' ShredDate
+                    // And update their files' ShredDate
                     if(consumerToEdit.Files != null)
                     {
                         foreach (File file in consumerToEdit.Files)
@@ -230,15 +231,19 @@ namespace FileFinder.Controllers
                 return NotFound();
             }
 
+            //Get consumer
             var consumer = await _context.Consumers
                 .SingleOrDefaultAsync(m => m.ID == id);
             if (consumer == null)
             {
                 return NotFound();
             }
+            //Get associated files
+            consumer.Files = _context.Files.Where(f => f.ConsumerID == consumer.ID).ToList();
 
             return View(consumer);
         }
+
 
         // POST: Consumer/Delete/5
         [HttpPost, ActionName("Delete")]

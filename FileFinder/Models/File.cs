@@ -59,6 +59,10 @@ namespace FileFinder.Models
 
         public void SetShredDate(EditConsumerViewModel consumerVM)
         {
+            if(consumerVM.EndDate == null)
+            {
+                this.ShredDate = null;
+            }
             if(consumerVM.EndDate.HasValue)
             {
                 this.ShredDate = consumerVM.EndDate.Value.AddYears(7).AddDays(1);
