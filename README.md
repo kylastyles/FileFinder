@@ -10,3 +10,22 @@ Now that Kyla has completed LaunchCode's LC101 program, she finally knows how to
 Please enjoy "FileFinder".
 
 *NOTE: All data in the database is completely fictional. 
+
+Features
+
+    Authorized User Login: data is only accessible to file manager and admin.
+    Daily Tasks:
+        show inactive files due to be shredded based on current date and consumer end date
+        show full or damaged files due for new file creation
+    Data Queries: find files based on consumer name, case manager, program, room, or building
+    Email Case Managers: inform them of paperwork discrepencies within the files.
+    Audits: pull random list of files to perform quarterly audits.
+
+Technologies
+
+I will be creating an ASP.Net Core MVC application in C#, with persistent data stored in an Entity Framework SQLServer database, styled with Bootstrap.
+
+What I'll Have to Learn
+
+    Session logins with ASP.Net.
+    Enhanced security and validation.
